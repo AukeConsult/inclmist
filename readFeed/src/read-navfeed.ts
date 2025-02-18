@@ -15,8 +15,9 @@ export async function readFeed(fromDate: number, saveDir: string) {
 
     const change_date = (moment(fromDate)).format('DD MMM yyyy 00:00:00 +0100')
 
+    const describedJobs = []
 
-    while (!stopRead) {
+    while (!stopRead && numPosts<200000) {
 
         let urlPage = url + next_url;
         var response = await fetch(urlPage, {
@@ -28,9 +29,6 @@ export async function readFeed(fromDate: number, saveDir: string) {
             }
 
         })
-
-        const activeJobs = []
-        const describedJobs = []
 
         var worklist = await response.json() as {
             version:	    string,
@@ -50,20 +48,17 @@ export async function readFeed(fromDate: number, saveDir: string) {
             if (worklist.next_url) {
                 next_url = worklist.next_url
                 numPosts += worklist.items.length
-                for (let item of worklist.items) {
+                for (let post of worklist.items) {
 
-                    const x: { id: string, url: string, date_modified: string, _feed_entry: any } = item;
-                    let z: Date = new Date(Date.parse(x.date_modified))
+                    let z: Date = new Date(Date.parse(post.date_modified))
                     if(z>maxDate) {
                         maxDate = z;
                     }
-                    const entry = x._feed_entry
+                    const entry = post._feed_entry
                     if (entry) {
                         const {status} = entry;
-                        if (status === "INACTIVE") {
-                            //console.log(entry)
-                        } else {
-                            var r = await fetch(url + x.url, {
+                        if (status != "INACTIVE") {
+                            var r = await fetch(url + post.url, {
                                 method: 'GET',
                                 headers: {
                                     'Authorization': `Bearer ${token}`,
@@ -76,36 +71,42 @@ export async function readFeed(fromDate: number, saveDir: string) {
                             if(!("INACTIVE" == descr.status)) {
                                 numPostsDesciption++;
                                 describedJobs.push({
-                                    id: x.id,
-                                    entry: entry,
-                                    descr: descr
+                                    id: post.id,
+                                    post_title: post.title,
+                                    content_text: post.content_text,
+                                    date_modified: post.date_modified,
+                                    title: entry.title,
+                                    businessName: entry.businessName,
+                                    municipal: entry.municipal,
+                                    last_modified: descr.sistEndret,
+                                    ad: descr.ad_content
                                 })
                             } else {
                                 numPostsActive++
-                                activeJobs.push({
-                                        id: x.id,
-                                        entry: entry,
-                                        descr: descr
+                                describedJobs.push({
+                                    id: post.id,
+                                    post_title: post.title,
+                                    content_text: post.content_text,
+                                    date_modified: post.date_modified,
+                                    title: entry.title,
+                                    businessName: entry.businessName,
+                                    municipal: entry.municipal,
+                                    last_modified: descr.sistEndret
                                 })
-
                             }
                         }
                     }
                 }
                 console.log(urlPage, numPosts, numPostsActive, numPostsDesciption)
-
-                writeFileSync(join(saveDir, "../../navdata/describedJobs-" + numFile + ".json"), JSON.stringify(describedJobs, null, 4), {
-                    flag: 'w',
-                });
-                writeFileSync(join(saveDir, "../../navdata/activeJobs-" + numFile + ".json"), JSON.stringify(activeJobs, null, 4), {
-                    flag: 'w',
-                });
-
                 numFile++
 
             } else {
                 stopRead = true;
             }
+
+            writeFileSync(join(saveDir, "../../navdata/describedJobs-all.json"), JSON.stringify(describedJobs, null, 4), {
+                flag: 'w',
+            });
         }
 
     }

@@ -1,29 +1,20 @@
 {
   "name": "navfeed",
   "version": "1.0.0",
-  "main": "index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "read-navfeed": "npx tsx src/read-60-days.ts",
-    "start": "npx tsx --watch  src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "read-navfeed": "npx tsx src/read-60-days.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "common-es": "^1.0.1",
-    "cors": "^2.8.5",
-    "express": "^5.0.1",
     "moment": "^2.30.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
     "@types/node": "^22.13.4",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
-    "eslint": "^9.20.1",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2"
   },
