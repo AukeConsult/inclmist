@@ -1,6 +1,5 @@
 <p>test works!</p>
 <div class="chat-container">
-  <div>heloo chat</div>
   <div *ngFor="let message of chatHistory" class="message" [ngClass]="message.role">
     <pre>{{ message.role === 'user' ? 'You' : 'Bot' }}</pre>
     <div *ngIf="message.type === 'text'">

@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+.navlogo
+{
+  height: 20px;
+}
+.text-big {
+  font-size: 1.5rem;
+}
+.text-normal {
+  font-size: 1rem;
+}
+.text-tiny {
+  font-size: 0.8rem;
+}
+.text-tiny-bold {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+html {
+  @media (min-width: 100px) {
+    font-size: 10px;
+  }
+  @media (min-width: 400px) {
+    font-size: 12px;
+  }
+  @media (min-width: 800px) {
+    font-size: 14px;
+  }
+  @media (min-width: 1200px) {
+    font-size: 16px;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
