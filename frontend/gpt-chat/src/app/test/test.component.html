@@ -1,0 +1,17 @@
+<p>test works!</p>
+<div class="chat-container">
+  <div>heloo chat</div>
+  <div *ngFor="let message of chatHistory" class="message" [ngClass]="message.role">
+    <pre>{{ message.role === 'user' ? 'You' : 'Bot' }}</pre>
+    <div *ngIf="message.type === 'text'">
+      <pre>{{ message.content }}</pre>
+    </div>
+
+    <div *ngIf="message.type === 'image'">
+      <img [src]="message.content" alt="Generated Image" class="generated-image"/>
+    </div>
+  </div>
+
+  <input [(ngModel)]="userMessage" placeholder="Type a message or request an image..." (keyup.enter)="sendMessage()" />
+  <button (click)="sendMessage()">Send</button>
+</div>

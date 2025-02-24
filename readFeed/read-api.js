@@ -1,10 +1,9 @@
-import moment from 'moment';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
+import Moment from "moment"
+import {stripHtml} from "string-strip-html";
 
-export async function readFeed(fromDate: number, saveDir: string) {
+export async function readFeed(fromDate, writeFile) {
 
-    const url = "https://pam-stilling-feed.nav.no"
+    const url = "https://pam-stilling-feed.nav.no/"
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aG9tYXMuYXVrZUBqb2JidGVhbS5ubyIsImtpZCI6IjQzOTdmNWY5LWQ4OGQtNDNiZC04NTEwLWRlNDlmMTkxOWI3MCIsImlzcyI6Im5hdi1ubyIsImF1ZCI6ImZlZWQtYXBpLXYyIiwiaWF0IjoxNzM5NDM2MTM5LCJleHAiOm51bGx9.3M-jef4J6Nt4J0EWjoDD0YxAxOwScWbLZ30DYdB7Fso'
     let stopRead = false
     let next_url = '/api/v1/feed'
@@ -12,10 +11,11 @@ export async function readFeed(fromDate: number, saveDir: string) {
     let numPostsActive = 0
     let numPostsDesciption = 0
     let numFile = 0
+    let sizePosted = 0;
 
-    const change_date = (moment(fromDate)).format('DD MMM yyyy 00:00:00 +0100')
+    let describedJobs = []
 
-    const describedJobs = []
+    const change_date = (new Moment(fromDate)).format('DD MMM yyyy 00:00:00 +0100')
 
     while (!stopRead && numPosts<200000) {
 
@@ -30,19 +30,9 @@ export async function readFeed(fromDate: number, saveDir: string) {
 
         })
 
-        var worklist = await response.json() as {
-            version:	    string,
-            title:	        string,
-            home_page_url:	string,
-            feed_url:	    string,
-            description:	string,
-            next_url?:	    string,
-            id:	            string,
-            next_id?:	    string,
-            items:	[]
-        };
+        var worklist = await response.json()
 
-        let maxDate: Date = new Date(Date.parse("1/1/1970"));
+        let maxDate = new Date(Date.parse("1/1/1970"));
 
         if (worklist) {
             if (worklist.next_url) {
@@ -50,7 +40,7 @@ export async function readFeed(fromDate: number, saveDir: string) {
                 numPosts += worklist.items.length
                 for (let post of worklist.items) {
 
-                    let z: Date = new Date(Date.parse(post.date_modified))
+                    let z = new Date(Date.parse(post.date_modified))
                     if(z>maxDate) {
                         maxDate = z;
                     }
@@ -66,25 +56,47 @@ export async function readFeed(fromDate: number, saveDir: string) {
                                 }
 
                             })
+
                             var descr = await r.json()
-                            // @ts-ignore
-                            if(!("INACTIVE" == descr.status)) {
+                            if("INACTIVE" != descr.status) {
                                 numPostsDesciption++;
-                                describedJobs.push({
+                                let ad = descr.ad_content
+                                let job = {
                                     id: post.id,
+                                    link: descr.link,
+                                    applicationUrl: descr.applicationUrl,
+                                    applicationUrl2: "https://arbeidsplassen.nav.no/stillinger/stilling/" + post.id,
                                     post_title: post.title,
                                     content_text: post.content_text,
                                     date_modified: post.date_modified,
+                                    expires: ad.expires,
                                     title: entry.title,
                                     businessName: entry.businessName,
                                     municipal: entry.municipal,
-                                    last_modified: descr.sistEndret,
-                                    ad: descr.ad_content
-                                })
+                                    last_ad_modified: ad.sistEndret,
+                                    applicationDue: ad.applicationDue,
+                                    occupationCategories: ad.occupationCategories,
+                                    employer: ad.employer,
+                                    descriptionText: stripHtml(ad.description).result,
+                                    categoryList: ad.categoryList,
+                                    workLocations: ad.workLocations,
+                                    contactList: ad.contactList,
+                                    engagementtype: ad.engagementtype,
+                                    extent: ad.extent,
+                                    starttime: ad.startTime,
+                                    positioncount: ad.positioncount,
+                                    sector: ad.sector
+                                }
+
+                                let size = JSON.stringify(job,4).length
+                                sizePosted = sizePosted + size
+                                describedJobs.push(job)
+
                             } else {
                                 numPostsActive++
-                                describedJobs.push({
+                                let job = {
                                     id: post.id,
+                                    applicationUrl: "https://arbeidsplassen.nav.no/stillinger/stilling/" + post.id,
                                     post_title: post.title,
                                     content_text: post.content_text,
                                     date_modified: post.date_modified,
@@ -92,25 +104,31 @@ export async function readFeed(fromDate: number, saveDir: string) {
                                     businessName: entry.businessName,
                                     municipal: entry.municipal,
                                     last_modified: descr.sistEndret
-                                })
+                                }
+
+                                let size = JSON.stringify(job,4).length
+                                sizePosted = sizePosted + size
+
+                                describedJobs.push(job)
                             }
+
+                            if(sizePosted>500000000) {
+                                writeFile(numFile,describedJobs)
+                                numFile++
+                                sizePosted=0
+                                describedJobs=[]
+                            }
+
                         }
                     }
                 }
-                console.log(urlPage, numPosts, numPostsActive, numPostsDesciption)
-                numFile++
+                console.log(urlPage, numPosts, numPostsActive, numPostsDesciption, sizePosted)
 
             } else {
                 stopRead = true;
             }
-
-            writeFileSync(join(saveDir, "../../navdata/describedJobs-all.json"), JSON.stringify(describedJobs, null, 4), {
-                flag: 'w',
-            });
         }
-
     }
     console.log("finish read")
 
 }
-
