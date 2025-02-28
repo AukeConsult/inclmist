@@ -112,7 +112,7 @@ export async function readFeed(fromDate, writeFile) {
                                 describedJobs.push(job)
                             }
 
-                            if(sizePosted>500000000) {
+                            if(sizePosted>50000000) {
                                 writeFile(numFile,describedJobs)
                                 numFile++
                                 sizePosted=0
