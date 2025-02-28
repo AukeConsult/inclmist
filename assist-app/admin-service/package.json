@@ -1,0 +1,21 @@
+{
+  "name": "admin-service",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --inspect ./build/server.js",
+    "start-server-watch": "node-dev ./build/server.js",
+    "start-server": "npm run dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "debug": "^4.4.0",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0"
+  }
+}
