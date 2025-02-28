@@ -1,5 +1,5 @@
 {
-  "name": "gpt-chat",
+  "name": "assist-gpt",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
