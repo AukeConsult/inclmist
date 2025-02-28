@@ -1,0 +1,25 @@
+<ng-container>
+<div class="container">
+  <div class="row text-normal" *ngFor="let message of chatHistory">
+    <div *ngIf="message.type === 'text'">
+      <div *ngIf="message.role === 'user'">
+        <div class="border rounded p-2 mt-1 mb-1 text-end text-wrap">{{ message.content }}</div>
+      </div>
+      <div class="border rounded p-2 bg-light-subtle" *ngIf="message.role != 'user'" >
+        <div class="d-flex flex-wrap p-1" *ngFor="let paragraph of paragraphs(message.content)">
+          {{ paragraph }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="message.type === 'image'">
+      <img [src]="message.content" alt="Generated Image" class="generated-image"/>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="input-group">
+      <input  type="text" class="form-control" aria-label="Text input " [(ngModel)]="userMessage" placeholder="Type a message or request an image..." (keyup.enter)="sendMessage()" />
+      <button type="button" class="btn" (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+</ng-container>
