@@ -1,8 +1,0 @@
-{
-  "projects": {
-    "default": "collect-server",
-    "collect-server": "collect-server"
-  },
-  "targets": {},
-  "etags": {}
-}
