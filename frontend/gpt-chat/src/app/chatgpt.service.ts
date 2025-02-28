@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 export class ChatgptService {
   private chatApiUrl = 'https://api.openai.com/v1/chat/completions';
   private imageApiUrl = 'https://api.openai.com/v1/images/generations';
-  private apiKey = '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';  // Replace with your OpenAI API key
+
+  private apiKey=""
 
   constructor(private http: HttpClient) {}
 
