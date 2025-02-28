@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 // @ts-ignore
 import {Observable} from 'rxjs';
-import {apiKeyMain} from "../secrets"
+import {apiKeyMain} from "../../secrets"
 
 @Injectable({
   providedIn: 'root'
