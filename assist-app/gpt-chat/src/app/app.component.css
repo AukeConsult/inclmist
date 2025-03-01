@@ -1,0 +1,37 @@
+
+
+/* Global Styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content should expand and keep the footer at the bottom */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Ensure the navbar stays fixed */
+.fixed-top {
+  z-index: 1030;
+}
+
+/* Footer should always be at the bottom */
+.fixed-bottom {
+  width: 100%;
+  text-align: center;
+}
+
+/* Full-width container styling */
+.full-width-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 15px;
+}

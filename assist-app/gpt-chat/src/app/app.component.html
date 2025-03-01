@@ -1,23 +1,15 @@
-<nav class="navbar navbar-light">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{ title }}</a>
-    </div>
-  </div><!-- /.container-fluid -->
-</nav>
+<app-header></app-header> <!-- Using the new Header component -->
 
-<div class="row">
-  <div class="col-9">
+<div class="content container-fluid mt-5 pt-4">
+  <div class="row">
+    <div class="col-lg-9 col-md-8 col-sm-12 full-width-container">
       <router-outlet></router-outlet>
-  </div>
-  <div class="col-3 border p-3 rounded bg-light">
-    <h6>chat liste</h6>
-    <h6>velg assistent</h6>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-12 border p-3 rounded bg-light full-width-container">
+      <h6>Chat Liste</h6>
+      <h6>Velg Assistent</h6>
+    </div>
   </div>
 </div>
 
-<div class="row mb-4 mt-2 p-2">
-  <p class="m-4 p-2">Developet by AI Assist Team (Copyright 2025)</p>
-</div>
-
+<app-footer></app-footer> <!-- Using the new Footer component -->
