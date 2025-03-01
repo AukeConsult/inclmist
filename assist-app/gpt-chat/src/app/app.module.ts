@@ -25,12 +25,13 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
   providers: [
     ChatgptService,
     provideFirebaseApp(() => initializeApp(
-      { projectId: "collect-server",
-        appId: "1:1063969642181:web:a0532c53e0d2d7c2eb02ac",
-        storageBucket: "collect-server.firebasestorage.app",
+      {
         apiKey: "AIzaSyCEJKLysW6AxEbM_VyC8NTRgVdsseHL55E",
         authDomain: "collect-server.firebaseapp.com",
-        messagingSenderId: "1063969642181"
+        projectId: "collect-server",
+        storageBucket: "collect-server.firebasestorage.app",
+        messagingSenderId: "1063969642181",
+        appId: "1:1063969642181:web:5f4e26ff188e9cd6eb02ac"
       })
     ),
     provideAuth(() => getAuth()),

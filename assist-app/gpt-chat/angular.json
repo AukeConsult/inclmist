@@ -22,12 +22,6 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
                 "src/assets"
-//              },
-//              {
-//                "glob": "bootstrap-icons.svg",
-//                "input": "./node_modules/bootstrap-icons/",
-//                "output": "/assets"
-//              }
             ],
             "styles": [
               "@angular/material/prebuilt-themes/purple-green.css",
