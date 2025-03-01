@@ -1,15 +1,12 @@
-<app-header></app-header> <!-- Using the new Header component -->
+<app-header></app-header>
 
-<div class="content container-fluid mt-5 pt-4">
-  <div class="row">
-    <div class="col-lg-9 col-md-8 col-sm-12 full-width-container">
-      <router-outlet></router-outlet>
-    </div>
-    <div class="col-lg-3 col-md-4 col-sm-12 border p-3 rounded bg-light full-width-container">
-      <h6>Chat Liste</h6>
-      <h6>Velg Assistent</h6>
-    </div>
+<div class="main-container">
+
+    <app-sidebar></app-sidebar> <!-- Left Sidebar -->
+
+  <div class="content">
+    <router-outlet></router-outlet>
   </div>
 </div>
 
-<app-footer></app-footer> <!-- Using the new Footer component -->
+<app-footer></app-footer>

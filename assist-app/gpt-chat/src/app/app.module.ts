@@ -8,6 +8,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {ChatgptService} from './chatgpt.service';
 import {FooterComponent} from './components/footer/footer.component';
 import {HeaderComponent} from './components/header/header.component';
+import {SidebarComponent} from './components/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {HeaderComponent} from './components/header/header.component';
     HttpClientModule,
     FooterComponent,
     HeaderComponent,
+    SidebarComponent,
   ],
   providers: [
     ChatgptService

@@ -17,31 +17,74 @@
   font-weight: bold;
 }
 
-html{
-  @media (min-width: 100px) {
-    font-size: 10px;
-    width: 99%;
-  }
-  @media (min-width: 400px) {
-    font-size: 12px;
-    width: 95%;
-
-  }
-  @media (min-width: 800px) {
-    font-size: 14px;
-    width: 800px;
-  }
-  @media (min-width: 1000px) {
-    font-size: 16px;
-    width: 1000px;
-  }
+html {
+  font-size: 16px;
+  width: 100%; /* Ensure full width */
 }
 
-body {
-  padding-top: 4px;
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  width: 100%;
+
+
+/* Ensure body and layout take full width */
+html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
+/* Ensure the main container takes full width */
+.main-container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 56px);
+  width: 100%;
+}
+
+/* Sidebar styles */
+app-sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 15px;
+  overflow-y: auto;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Content should take all remaining space */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  width: 100%;
+  max-width: unset; /* Remove max-width constraint */
+}
+
+
+/* Chat container: Responsive and full width */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Chat input should always be at the bottom */
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  width: 100%;
+}

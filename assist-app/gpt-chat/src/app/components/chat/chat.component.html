@@ -1,25 +1,30 @@
-<ng-container>
-<div class="container">
-  <div class="row text-normal" *ngFor="let message of chatHistory">
-    <div *ngIf="message.type === 'text'">
-      <div *ngIf="message.role === 'user'">
-        <div class="border rounded p-2 mt-1 mb-1 text-end text-wrap">{{ message.content }}</div>
-      </div>
-      <div class="border rounded p-2 bg-light-subtle" *ngIf="message.role != 'user'" >
-        <div class="d-flex flex-wrap p-1" *ngFor="let paragraph of paragraphs(message.content)">
-          {{ paragraph }}
+<div class="chat-container" >
+  <!-- Chat messages -->
+  <div class="chat-messages">
+    <div class="row text-normal" *ngFor="let message of chatHistory">
+      <div *ngIf="message.type === 'text'">
+        <!-- User message -->
+        <div class="message user-message" *ngIf="message.role === 'user'">
+          {{ message.content }}
+        </div>
+        <!-- Assistant message -->
+        <div class="message assistant-message" *ngIf="message.role !== 'user'">
+          <div *ngFor="let paragraph of paragraphs(message.content)">
+            {{ paragraph }}
+          </div>
         </div>
       </div>
-    </div>
-    <div *ngIf="message.type === 'image'">
-      <img [src]="message.content" alt="Generated Image" class="generated-image"/>
+      <!-- Image messages -->
+      <div *ngIf="message.type === 'image'">
+        <img [src]="message.content" alt="Generated Image" class="generated-image"/>
+      </div>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="input-group">
-      <input  type="text" class="form-control" aria-label="Text input " [(ngModel)]="userMessage" placeholder="Type a message or request an image..." (keyup.enter)="sendMessage()" />
-      <button type="button" class="btn" (click)="sendMessage()">Send</button>
-    </div>
+
+  <!-- Chat input box (fixed at the bottom) -->
+  <div class="chat-input-container">
+    <input type="text" class="chat-input" [(ngModel)]="userMessage"
+           placeholder="Type a message..." (keyup.enter)="sendMessage()" />
+    <button class="send-btn" (click)="sendMessage()">➤</button>
   </div>
 </div>
-</ng-container>

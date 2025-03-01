@@ -1,0 +1,89 @@
+/* Chat container: Full height and flexible layout */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 85vh; /* Adjust based on your needs */
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  overflow: hidden;
+}
+
+/* Chat messages: Scrollable area */
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
+/* Ensure chat messages are styled */
+.user-message, .assistant-message {
+  max-width: 75%;
+  padding: 12px;
+  border-radius: 18px;
+  margin: 10px;
+}
+
+/* User message styling */
+.user-message {
+  background: #007bff;
+  color: white;
+  align-self: flex-end;
+  text-align: right;
+}
+
+/* Assistant message styling */
+.assistant-message {
+  background: #f1f1f1;
+  color: black;
+  align-self: flex-start;
+  text-align: left;
+}
+
+/* Chat input container */
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Chat input box */
+.chat-input {
+  flex-grow: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  background: #f1f1f1;
+}
+
+/* Send button */
+.send-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 50%;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Scrollbar for messages */
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 3px;
+}
