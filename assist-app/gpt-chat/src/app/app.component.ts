@@ -8,19 +8,21 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Assist gpt';
-  isSidebarCollapsed = false;
+  isSidebarCollapsed = false; // Track sidebar state
+
+  constructor() {
+    this.restoreSidebarState();
+  }
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    localStorage.setItem('sidebarState', this.isSidebarCollapsed ? 'closed' : 'open');
+  }
 
-    // Add or remove class for layout changes
-    const mainContainer = document.querySelector('.main-container');
-    if (mainContainer) {
-      if (this.isSidebarCollapsed) {
-        mainContainer.classList.add('sidebar-collapsed');
-      } else {
-        mainContainer.classList.remove('sidebar-collapsed');
-      }
+  restoreSidebarState() {
+    const savedState = localStorage.getItem('sidebarState');
+    if (savedState === 'closed') {
+      this.isSidebarCollapsed = true;
     }
   }
 }

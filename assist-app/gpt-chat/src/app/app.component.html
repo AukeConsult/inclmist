@@ -1,9 +1,10 @@
-<app-header></app-header>
+<app-header (sidebarToggle)="toggleSidebar()"></app-header>
 
-<div class="main-container">
+<div class="main-container" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <!-- Sidebar Component (Toggles Visibility) -->
+  <app-sidebar *ngIf="!isSidebarCollapsed"></app-sidebar>
 
-    <app-sidebar></app-sidebar> <!-- Left Sidebar -->
-
+  <!-- Content Expands When Sidebar is Closed -->
   <div class="content">
     <router-outlet></router-outlet>
   </div>

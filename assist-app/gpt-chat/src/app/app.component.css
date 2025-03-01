@@ -69,12 +69,39 @@ app-sidebar {
   }
 }
 
-/* Ensure content is pushed below the navbar */
-.content {
-  flex-grow: 1;
-  padding: 20px;
+/* Sidebar default state */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 15px;
   overflow-y: auto;
+  position: fixed; /* Fix sidebar in place */
+  left: 0; /* Ensure it stays at the left */
+  top: 56px; /* Adjust for navbar */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Sidebar collapsed state */
+.sidebar.collapsed {
+  width: 0px; /* Fully collapses */
+  padding: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+/* Ensure content expands when sidebar is collapsed */
+.main-container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 56px);
   width: 100%;
-  padding-top: 80px; /* Adjust based on navbar height */
+  transition: width 0.3s ease-in-out;
+}
+
+/* When sidebar is collapsed, content takes full width */
+.sidebar-collapsed .content {
+  width: 100%;
 }
 
