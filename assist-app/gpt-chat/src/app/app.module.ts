@@ -1,11 +1,12 @@
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-import {ChatComponent} from './queries/chat.component';
-import {ChatgptService} from './chatgpt.service';
+import {ChatComponent} from './components/chat.component';
+import {AppComponent} from './app.component';
+import {FormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
+import {AppRoutingModule} from './app-routing.module';
+import {ChatgptService} from './chatgpt.service';
+
 
 @NgModule({
   declarations: [
