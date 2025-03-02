@@ -10,6 +10,11 @@
   padding: 15px;
   overflow: hidden;
   margin-top: 50px;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  word-wrap: break-word; /* Wrap long words */
+  overflow-wrap: break-word;
+  max-width: 100%;
+
 }
 
 /* Chat messages: Scrollable area */
@@ -29,15 +34,15 @@
 
 /* User message styling */
 .user-message {
-  background: #007bff;
-  color: white;
+  background: hsl(0deg 0% 88.5% / 50%);
+  color: black;
   align-self: flex-end;
   text-align: right;
 }
 
 /* Assistant message styling */
 .assistant-message {
-  background: #f1f1f1;
+  /*background: #f1f1f1;*/
   color: black;
   align-self: flex-start;
   text-align: left;
@@ -86,4 +91,25 @@
 .chat-messages::-webkit-scrollbar-thumb {
   background: #bbb;
   border-radius: 3px;
+}
+
+/* Ensure chat messages wrap properly */
+.user-message, .assistant-message {
+  word-wrap: break-word;  /* Wrap long words */
+  overflow-wrap: break-word; /* Ensure breaking works */
+  white-space: normal;  /* Allow text to wrap */
+  max-width: 100%; /* Prevents messages from being too wide */
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 15px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }

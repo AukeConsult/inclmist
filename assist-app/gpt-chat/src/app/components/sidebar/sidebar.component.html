@@ -1,0 +1,9 @@
+  <div class="sidebar" id="sidebar">
+  <div class="sidebar-content" [class.collapsed]="isCollapsed">
+    <h5>Chat History</h5>
+    <ul>
+      <li *ngFor="let chat of chatHistory">{{ chat }}</li>
+    </ul>
+    <button class="new-chat-btn">+ New Chat</button>
+  </div>
+</div>

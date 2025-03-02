@@ -1,0 +1,70 @@
+/* src/app/components/sidebar/sidebar.component.css */
+/* Sidebar default state */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  padding: 15px;
+  position: fixed;
+  left: 0; /* Fix sidebar in place */
+  top: 60px; /* Adjust for navbar */
+  transition: left 0.3s ease-in-out; /* Animate sidebar */
+  border-right: 1px solid #ddd;
+}
+
+/* Sidebar hidden state */
+.sidebar.collapsed {
+  left: -250px; /* Moves it off-screen */
+}
+
+
+/* Show sidebar when active */
+.sidebar.active {
+  left: 0;
+}
+
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar-content li {
+  padding: 10px;
+  background: #e9ecef;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: -40px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.new-chat-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.collapsed {
+  width: 60px;
+}
+
