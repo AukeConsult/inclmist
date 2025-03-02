@@ -68,3 +68,21 @@
   width: 60px;
 }
 
+.icons-container {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.search-icon,
+.add-icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.search-icon:hover,
+.add-icon:hover {
+  transform: scale(1.1);
+}

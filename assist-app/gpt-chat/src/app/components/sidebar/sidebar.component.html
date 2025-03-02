@@ -1,9 +1,12 @@
-  <div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar">
   <div class="sidebar-content" [class.collapsed]="isCollapsed">
     <h5>Chat History</h5>
+    <div class="icons-container">
+      <i class="fas fa-search search-icon"></i>
+      <i class="fas fa-plus add-icon"></i>
+    </div>
     <ul>
       <li *ngFor="let chat of chatHistory">{{ chat }}</li>
     </ul>
-    <button class="new-chat-btn">+ New Chat</button>
   </div>
 </div>
