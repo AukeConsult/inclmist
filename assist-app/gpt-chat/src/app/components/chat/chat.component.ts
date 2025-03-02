@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { ChatgptService } from '../../chatgpt.service';
 
 @Component({
-  selector: 'app-test',
-  templateUrl: './chat.component.html',
-  styleUrl: './chat.component.css'
+    selector: 'app-test',
+    templateUrl: './chat.component.html',
+    styleUrl: './chat.component.css',
+    standalone: false
 })
 export class ChatComponent {
   userMessage = '';
