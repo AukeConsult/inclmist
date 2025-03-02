@@ -1,0 +1,137 @@
+/* Center the login container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Login box */
+.login-box {
+  width: 400px;
+  padding: 40px;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Welcome text */
+.login-box h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Email input */
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* Button */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background: #00a884;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-box button:hover {
+  background: #00876d;
+}
+
+/* Signup link */
+.login-box p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.login-box a {
+  color: #00a884;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-box a:hover {
+  text-decoration: underline;
+}
+
+/* OR separator */
+.or-separator {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.or-separator::before,
+.or-separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ccc;
+}
+
+.or-separator span {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #777;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-login button {
+  width: 100%;
+  padding: 12px;
+  background: white; /* ✅ White background */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: black; /* ✅ Black text */
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* ✅ Aligns items in a row */
+  justify-content: flex-start; /* ✅ Aligns text and logo to the left */
+  gap: 12px; /* ✅ Space between logo and text */
+  transition: background 0.3s ease;
+}
+
+.social-login button:hover {
+  background: #f0f0f0;
+}
+
+/* Logo Styling */
+.social-login img {
+  width: 24px; /* ✅ Adjust size of logos */
+  height: 24px;
+  margin-left: 10px; /* ✅ Space from the button's left edge */
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #777;
+}
+
+.login-footer a {
+  color: #00a884;
+  text-decoration: none;
+}
