@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
     selector: 'app-sidebar',
-    imports: [CommonModule], // ✅ Import CommonModule here
+    standalone: true,
     templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.css'
+    styleUrl: './sidebar.component.css',
+    imports: [CommonModule, FormsModule]
 })
 export class SidebarComponent {
   isCollapsed = false;
