@@ -3,19 +3,35 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --inspect ./build/server.js",
-    "start-server-watch": "node-dev ./build/server.js",
-    "start-server": "npm run dev"
+    "build:watch": "tsc --watch",
+    "run": "npm run build && node lib/index.js",
+    "serve": "npm run build && firebase emulators:start --only functions:api",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions:api",
+    "logs": "firebase functions:log"
   },
+  "main": "lib/index.js",
   "author": "",
   "license": "ISC",
   "description": "",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.3.2",
+    "firebase-tools": "^13.32.0"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "cors": "^2.8.5",
     "debug": "^4.4.0",
     "express": "^4.21.2",
-    "express-async-handler": "^1.2.0"
-  }
+    "express-async-handler": "^1.2.0",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "~5.5.4"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "private": true
 }
