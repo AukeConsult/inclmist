@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { ChatgptService } from '../../chatgpt.service';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
     selector: 'app-test',
     templateUrl: './chat.component.html',
     styleUrl: './chat.component.css',
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, FormsModule]
 })
 export class ChatComponent {
   userMessage = '';

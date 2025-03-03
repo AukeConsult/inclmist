@@ -1,13 +1,19 @@
-<app-header (sidebarToggle)="toggleSidebar()"></app-header>
+<!-- Show Header, Sidebar, and Footer ONLY if NOT on the login page -->
+<ng-container *ngIf="!isLoginPage()">
+  <app-header (sidebarToggle)="toggleSidebar()"></app-header>
 
-<div class="main-container" [class.sidebar-collapsed]="isSidebarCollapsed">
-  <!-- Sidebar Component (Toggles Visibility) -->
-  <app-sidebar *ngIf="!isSidebarCollapsed"></app-sidebar>
+  <div class="main-container" [class.sidebar-collapsed]="isSidebarCollapsed">
+    <!-- Sidebar Component (Toggles Visibility) -->
+    <app-sidebar *ngIf="!isSidebarCollapsed"></app-sidebar>
 
-  <!-- Content Expands When Sidebar is Closed -->
-  <div class="content">
-    <router-outlet></router-outlet>
+    <!-- Content Expands When Sidebar is Closed -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-</div>
 
-<app-footer></app-footer>
+  <app-footer></app-footer>
+</ng-container>
+
+<!-- Always Show the Login Page -->
+<router-outlet *ngIf="isLoginPage()"></router-outlet>

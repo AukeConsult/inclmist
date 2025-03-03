@@ -1,40 +1,51 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service'; // ✅ Import AuthService
+import { User } from '@angular/fire/auth';
 
 @Component({
-    selector: 'app-header',
-    imports: [],
-    templateUrl: './header.component.html',
-    styleUrl: './header.component.css'
+  selector: 'app-header',
+  standalone: true,
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css',
+  imports: [CommonModule, FormsModule]
 })
 export class HeaderComponent implements OnInit {
   @Output() sidebarToggle = new EventEmitter<void>();
+  user: User | null = null; // ✅ Store user info
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    this.restoreSidebarState(); // Restore sidebar state when page loads
+    this.restoreSidebarState();
+    this.loadUser(); // ✅ Load user on component init
+  }
+
+  loadUser() {
+    this.user = this.authService.getLoggedInUser();
   }
 
   toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    this.sidebarToggle.emit(); // Notify parent component (app.component.ts)
+    this.sidebarToggle.emit();
 
     if (sidebar) {
       sidebar.classList.toggle('active');
-
-      // Save sidebar state in localStorage
-      if (sidebar.classList.contains('active')) {
-        localStorage.setItem('sidebarState', 'open');
-      } else {
-        localStorage.setItem('sidebarState', 'closed');
-      }
+      localStorage.setItem('sidebarState', sidebar.classList.contains('active') ? 'open' : 'closed');
     }
   }
 
   restoreSidebarState() {
     const sidebar = document.getElementById('sidebar');
     const sidebarState = localStorage.getItem('sidebarState');
-
     if (sidebar && sidebarState === 'open') {
       sidebar.classList.add('active');
     }
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
