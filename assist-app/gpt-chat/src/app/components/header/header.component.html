@@ -9,17 +9,12 @@
     <a class="navbar-brand" href="#">Assist GPT</a>
 
     <!-- User Profile and Logout -->
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center" *ngIf="user">
       <!-- ✅ Show user email if logged in -->
-      <span *ngIf="user" class="me-3">Hello, {{ user.email }}</span>
+      <span *ngIf="user" class="me-3">Hello, {{ user.displayName }}</span>
 
       <!-- User Logo -->
-      <img
-        src="assets/logo/moez.jpg"
-        alt="User Profile"
-        class="user-logo rounded-circle me-3"
-      />
-
+      <img [src]="user.photoURL" alt="Profile Image" class="profile-img">
       <!-- Logout Button -->
       <button class="btn btn-outline-danger" (click)="logout()">
         Logout

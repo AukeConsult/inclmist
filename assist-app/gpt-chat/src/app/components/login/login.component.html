@@ -2,13 +2,16 @@
   <div class="login-box">
     <h2>Welcome back</h2>
 
-    <input type="email" [(ngModel)]="email" placeholder="Email address*" required />
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
 
+    <input type="email" [(ngModel)]="email" placeholder="Email address*" required />
     <input type="password" [(ngModel)]="password" placeholder="Password*" required />
 
     <button (click)="login()">Continue</button>
 
-    <p>Don't have an account? <a routerLink="/register">Sign Up</a></p>
+    <p>Don't have an account? <a [routerLink]="'/register'">Sign Up</a></p>
 
     <div class="or-separator"><span>OR</span></div>
 
@@ -29,6 +32,12 @@
         <img src="assets/logo/phone.png" alt="Phone Icon" />
         Continue with Phone
       </button>
+    </div>
+
+    <!-- ✅ Show "Resend Verification Email" button if user is unverified -->
+    <div *ngIf="showResendVerification">
+      <p>Your email is not verified. Please check your inbox.</p>
+      <button class="btn btn-warning" (click)="resendVerificationEmail()">Resend Email</button>
     </div>
 
     <div id="recaptcha-container"></div>
