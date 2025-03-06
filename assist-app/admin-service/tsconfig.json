@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "esModuleInterop": true,
+    "resolveJsonModule": true,               // json imports
+    "esModuleInterop": true,                 // import common modules as ES6 Modules
     "moduleResolution": "nodenext",
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
