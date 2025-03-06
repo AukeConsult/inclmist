@@ -1,6 +1,49 @@
-<div>
-  <h2>Register</h2>
-  <input type="email" [(ngModel)]="email" placeholder="Email" />
-  <input type="password" [(ngModel)]="password" placeholder="Password" />
-  <button (click)="register()">Register</button>
+<div class="register-container">
+  <div class="register-box">
+    <h2>Create an Account</h2>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <input type="email" [(ngModel)]="email" placeholder="Email Address*" required />
+
+    <input type="password" [(ngModel)]="password" placeholder="Password* (Min. 6 characters)" required />
+
+    <input type="password" [(ngModel)]="confirmPassword" placeholder="Confirm Password*" required />
+
+    <button (click)="register()" [disabled]="isLoading">
+      {{ isLoading ? 'Registering...' : 'Register' }}
+    </button>
+
+    <p>Already have an account? <a [routerLink]="'/login'">Login</a></p>
+
+    <div class="or-separator"><span>OR</span></div>
+
+    <div class="social-login">
+      <button (click)="registerWithGoogle()">
+        <img src="assets/logo/IOS_Google_icon.png" alt="Google Logo" />
+        Continue with Google
+      </button>
+      <button (click)="loginWithMicrosoft()">
+        <img src="assets/logo/Microsoft_logo.svg" alt="Microsoft Logo" />
+        Continue with Microsoft
+      </button>
+      <button (click)="loginWithApple()">
+        <img src="assets/logo/Apple_logo_black.svg" alt="Apple Logo" />
+        Continue with Apple
+      </button>
+      <button (click)="loginWithPhone()">
+        <img src="assets/logo/phone.png" alt="Phone Icon" />
+        Continue with Phone
+      </button>
+    </div>
+
+    <!-- ✅ Show resend verification button if user registered but email is not verified -->
+    <div *ngIf="showResendVerification">
+      <p>Didn't receive a verification email?</p>
+      <button class="btn btn-warning" (click)="resendEmailVerification()">Resend Email</button>
+      <p *ngIf="verificationMessage" class="success-message">{{ verificationMessage }}</p>
+    </div>
+  </div>
 </div>

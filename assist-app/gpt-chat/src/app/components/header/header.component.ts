@@ -20,7 +20,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.restoreSidebarState();
-    this.loadUser(); // ✅ Load user on component init
+    this.loadUser();
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
+    }
   }
 
   loadUser() {

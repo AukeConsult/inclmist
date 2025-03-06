@@ -8,6 +8,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
 import {FooterComponent} from './components/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
+import {RecaptchaFormsModule, RecaptchaModule} from 'ng-recaptcha';
 
 
 @NgModule({
@@ -22,6 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
+    RecaptchaModule,
+    RecaptchaFormsModule,
   ],
   providers: [ChatgptService],
   bootstrap: [AppComponent]
