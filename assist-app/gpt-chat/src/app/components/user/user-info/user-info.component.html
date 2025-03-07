@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>Update User Information</h2>
+
+  <form *ngIf="!loading && user && userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="displayName">Name:</label>
+      <input id="displayName" formControlName="displayName" />
+    </div>
+
+    <div>
+      <label for="phoneNumber">Phone Number:</label>
+      <input id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="+1234567890" />
+      <div *ngIf="userForm?.get('phoneNumber')?.invalid && userForm?.get('phoneNumber')?.dirty">
+        Please enter a valid phone number (e.g., +1234567890).
+      </div>
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input id="email" formControlName="email" type="email" />
+    </div>
+
+    <div>
+      <label for="password">New Password (optional):</label>
+      <input id="password" formControlName="password" type="password" />
+    </div>
+
+    <button type="submit" [disabled]="userForm?.invalid || loading">Update</button>
+  </form>
+</div>

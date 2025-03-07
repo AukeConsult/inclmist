@@ -1,0 +1,86 @@
+/* Center the form container and add padding */
+.container {
+  max-width: 500px;
+  margin: 80px auto; /* Push content below header and center it */
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Add space between form elements */
+.container h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Style labels for better visibility */
+.container label {
+  font-weight: 600;
+  color: #444;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Input fields with better aesthetics */
+.container input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.2s ease-in-out;
+}
+
+/* Highlight input when focused */
+.container input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Error messages */
+.error {
+  color: #d9534f;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Submit Button */
+.container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+/* Disabled Button */
+.container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Hover effect for the button */
+.container button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    max-width: 90%;
+    margin: 60px auto;
+    padding: 20px;
+  }
+}
