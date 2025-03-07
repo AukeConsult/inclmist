@@ -1,62 +1,60 @@
-/* Ensure the whole page and main container take full width */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
+/* Ensure the header is fixed at the top */
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 60px; /* Adjust based on actual header height */
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Main container stretches across full width */
+/* Ensure everything starts after the header */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* ✅ Push down the main container below the fixed header */
 .main-container {
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 56px); /* Adjust based on navbar height */
   width: 100%;
   max-width: 100%;
+  height: calc(100vh - 60px); /* Ensures it fills remaining space */
+  margin-top: 60px; /* ✅ Pushes down below the header */
+  overflow: hidden; /* Prevent content from being cut off */
 }
 
-/* Sidebar remains at a fixed width */
+/* Sidebar remains fixed */
 app-sidebar {
   width: 250px;
   min-width: 250px;
-  height: 100vh;
+  height: calc(100vh - 60px); /* Adjust for the header height */
   background-color: #f8f9fa;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
   transition: width 0.3s ease-in-out;
+  position: fixed;
+  left: 0;
+  top: 60px; /* Make sure it does not overlap the header */
 }
 
-/* Chat container: Ensure it takes full width */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 90%;  /* Increase from 100% to 90% of the parent container */
-  max-width: 1400px; /* Increase max width */
-  height: 90vh;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-/* Chat messages should stretch fully */
-.chat-box {
+/* Ensure content is below the header */
+.content {
   flex-grow: 1;
+  padding: 20px;
   overflow-y: auto;
-  padding: 15px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 100%;
+  margin-left: 250px; /* Ensure it starts after the sidebar */
+  height: calc(100vh - 60px); /* Prevent overflow */
 }
 
-/* User & Assistant Messages */
-.user-message, .assistant-message {
-  max-width: 75%; /* Prevents messages from being too wide */
+/* If sidebar is collapsed, expand content */
+.sidebar-collapsed .content {
+  margin-left: 0;
 }
 
 /* Responsive adjustments */
@@ -65,43 +63,6 @@ app-sidebar {
     width: 60px;
   }
   .content {
-    max-width: calc(100% - 60px);
+    margin-left: 60px;
   }
 }
-
-/* Sidebar default state */
-.sidebar {
-  width: 260px;
-  height: 100vh;
-  background-color: #ffffff;
-  border-right: 1px solid #ddd;
-  padding: 15px;
-  overflow-y: auto;
-  position: fixed; /* Fix sidebar in place */
-  left: 0; /* Ensure it stays at the left */
-  top: 56px; /* Adjust for navbar */
-  transition: all 0.3s ease-in-out;
-}
-
-/* Sidebar collapsed state */
-.sidebar.collapsed {
-  width: 0px; /* Fully collapses */
-  padding: 0;
-  overflow: hidden;
-  border-right: none;
-}
-
-/* Ensure content expands when sidebar is collapsed */
-.main-container {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 56px);
-  width: 100%;
-  transition: width 0.3s ease-in-out;
-}
-
-/* When sidebar is collapsed, content takes full width */
-.sidebar-collapsed .content {
-  width: 100%;
-}
-

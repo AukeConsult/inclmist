@@ -9,16 +9,14 @@
     <a class="navbar-brand" href="#">Assist GPT</a>
 
     <!-- User Profile and Logout -->
-    <div class="d-flex align-items-center" *ngIf="user">
-      <!-- ✅ Show user email if logged in -->
-      <span *ngIf="user" class="me-3">Hello, {{ user.displayName }}</span>
-
-      <!-- User Logo -->
-      <img [src]="user.photoURL" alt="Profile Image" class="profile-img">
-      <!-- Logout Button -->
-      <button class="btn btn-outline-danger" (click)="logout()">
-        Logout
-      </button>
+    <!-- User Profile and Logout -->
+    <!-- ✅ Proper use of async pipe -->
+    <div class="d-flex align-items-center" *ngIf="user | async as currentUser">
+      <span class="me-3">Hello, {{ currentUser?.displayName || 'User' }}</span>
+      <img [src]="currentUser?.photoURL || 'assets/default-profile.png'" alt="Profile Image" class="profile-img">
+      <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
     </div>
+
+
   </div>
 </nav>

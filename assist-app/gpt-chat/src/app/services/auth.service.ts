@@ -9,19 +9,29 @@ import {
   User,
   RecaptchaVerifier,
   GoogleAuthProvider,
-  sendEmailVerification
+  sendEmailVerification, updateProfile, updatePassword, updateEmail, onAuthStateChanged
 } from '@angular/fire/auth';
 
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {doc, Firestore, getDoc, setDoc} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private recaptchaVerifier!: RecaptchaVerifier;
+  private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
-  constructor(public auth: Auth, private router: Router) {}
+  constructor(private auth: Auth,private router: Router,private firestore: Firestore) {
+    onAuthStateChanged(this.auth, (user) => {
+      this.userSubject.next(user); // Emit user when state changes
+    });
+  }
+
+  getLoggedInUser(): Observable<User | null> {
+    return this.userSubject.asObservable();
+  }
 
   async register(email: string, password: string) {
     try {
@@ -106,11 +116,6 @@ export class AuthService {
     }
   }
 
-  getLoggedInUser(): User | null {
-    const userData = localStorage.getItem('user');
-    return userData ? JSON.parse(userData) : null;
-  }
-
   isLoggedIn(): Observable<User | null> {
     return new Observable((observer) => {
       this.auth.onAuthStateChanged((user) => {
@@ -147,6 +152,58 @@ export class AuthService {
       console.error('Phone login error:', error);
     }
   }
+  async updateUserInfo(displayName: string, phoneNumber: string, email: string, password?: string) {
+    const user = this.auth.currentUser;
+    if (user) {
+      try {
+        // ✅ Update Firebase Auth Profile (only displayName)
+        await updateProfile(user, { displayName });
+
+        // ✅ Update email if changed
+        if (email && user.email !== email) {
+          await updateEmail(user, email);
+        }
+
+        // ✅ Update password if provided
+        if (password) {
+          await updatePassword(user, password);
+        }
+
+        // ✅ Store phone number separately in Firestore
+        await setDoc(doc(this.firestore, `users/${user.uid}`), {
+          phoneNumber: phoneNumber,
+          email: email
+        }, { merge: true });
+
+        console.log('User profile & Firestore data updated successfully');
+        return { success: true, message: 'User updated successfully!' };
+      } catch (error: any) {
+        console.error('Error updating user:', error);
+        throw new Error(error.message || 'Failed to update user');
+      }
+    } else {
+      throw new Error('No user is logged in');
+    }
+  }
+
+
+  async getUserPhoneNumber(uid: string): Promise<string | null> {
+    try {
+      const docRef = doc(this.firestore, `users/${uid}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data()['phoneNumber'] || null; // ✅ Access via index signature
+      } else {
+        console.warn('No Firestore document found for user:', uid);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching phone number:', error);
+      return null;
+    }
+  }
+
+
 
   // private setupRecaptcha() {
   //   if (!document.getElementById('recaptcha-container')) {
