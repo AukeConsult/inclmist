@@ -1,16 +1,21 @@
 import express from "express";
 import cors from "cors";
 import usersRoutes from "./routes/users.routes";
-
-console.log("🔥 Starting Express Server..."); // ✅ Log when the server starts
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use("/users", usersRoutes);
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`); // ✅ Log when server is ready
-});
+
+if (process.env.FUNCTIONS_EMULATOR !== "true") {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+}
+
+export default app;

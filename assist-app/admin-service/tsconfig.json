@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "resolveJsonModule": true,               // json imports
-    "esModuleInterop": true,                 // import common modules as ES6 Modules
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "moduleResolution": "nodenext",
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
@@ -13,7 +13,5 @@
     "target": "es2022"
   },
   "compileOnSave": true,
-  "include": [
-    "src", "src/**/*"
-  ]
+  "include": ["src/**/*"]  // ✅ Make sure the `src/` folder exists inside `functions/`
 }
