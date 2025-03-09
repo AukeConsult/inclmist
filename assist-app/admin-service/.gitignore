@@ -68,4 +68,4 @@ node_modules/
 # dataconnect generated files
 .dataconnect
 /lib/
-/src/firebase-admin-key.json
+/src/config/firebase-admin-key.json

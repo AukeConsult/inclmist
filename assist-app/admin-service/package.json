@@ -4,7 +4,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "run": "npm run build && node lib/index.js",
+    "debug": "npm run build && node --inspect-brk -r ts-node/register src/local.ts",
     "serve-emulate": "firebase emulators:start --only functions",
     "serve-emulate-all": "firebase emulators:start --inspect-functions",
     "shell": "npm run build && firebase functions:shell",
