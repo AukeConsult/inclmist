@@ -102,9 +102,6 @@ export class AuthService {
     }
   }
 
-
-
-
   async logout() {
     try {
       await signOut(this.auth);

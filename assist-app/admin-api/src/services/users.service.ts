@@ -1,4 +1,4 @@
-import * as fbAdmin from "firebase-admin";
+import { fbAdmin } from "../config/firebase";
 
 export const createUser = async (name: string, email: string) => {
     const db = fbAdmin.firestore()

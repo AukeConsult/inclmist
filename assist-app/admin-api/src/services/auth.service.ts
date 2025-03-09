@@ -1,4 +1,5 @@
-import * as fbAdmin from "firebase-admin";
+import { fbAdmin } from "../config/firebase";
+
 // ✅ Fetch a single user by UID
 export const getUserByUID = async (uid: string) => {
     return await fbAdmin.auth().getUser(uid);

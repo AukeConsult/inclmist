@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "moduleResolution": "nodenext",
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2022"
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*"]  // ✅ Make sure the `src/` folder exists inside `functions/`
+}
