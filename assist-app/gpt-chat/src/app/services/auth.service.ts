@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { AppUser } from 'shared-library'; // ✅ Import from shared-library
+
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -28,6 +30,7 @@ export class AuthService {
       this.userSubject.next(user); // Emit user when state changes
     });
   }
+
 
   getLoggedInUser(): Observable<User | null> {
     return this.userSubject.asObservable();
