@@ -1,5 +1,2 @@
-secrets.ts
 /.angular/
 /dist/
-.firebase/*.cache
-firebase-debug.log

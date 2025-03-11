@@ -1,5 +1,5 @@
 {
-  "name": "shared-library",
+  "name": "shared-chatgpt",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -7,9 +7,11 @@
     "build": "tsc"
   },
   "dependencies": {
-    "firebase": "^11.4.0"
+    "firebase": "^11.4.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-tools": "^13.32.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.3"
   }
 }

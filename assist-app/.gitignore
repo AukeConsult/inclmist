@@ -1,0 +1,9 @@
+**/secrets.ts
+**/.angular/
+**/dist/
+**/node_modules/
+node_modules/
+
+**/.firebase/*.cache
+**/firebase-debug.log
+**/package-lock.json
