@@ -3,7 +3,7 @@ import {QueryDescriptor} from "./query-descriptor";
 export interface ProfileInfo {
     Id: string
     public: boolean
-    profilesName: string
+    profileName: string
     ownerName: string
     ownerId: string
     description: string
