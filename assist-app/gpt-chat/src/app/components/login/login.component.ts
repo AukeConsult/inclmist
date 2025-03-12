@@ -19,7 +19,12 @@ export class LoginComponent {
   user: any = null; // Store the user for resending verification
 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    if (authService.isLoggedIn())
+    {
+      this.router.navigate(["/home"])
+    }
+  }
 
   async login() {
     this.errorMessage = '';

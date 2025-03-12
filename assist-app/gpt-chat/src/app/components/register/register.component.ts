@@ -21,7 +21,12 @@ export class RegisterComponent {
   showResendVerification: boolean = false;
   registeredUser: any = null; // Store registered user for resending verification
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    if (authService.isLoggedIn())
+    {
+      this.router.navigate(["/home"])
+    }
+  }
 
   async register() {
     this.errorMessage = ''; // Clear previous errors

@@ -23,27 +23,33 @@ export class HeaderComponent implements OnInit {
     this.restoreSidebarState();
     this.user = this.authService.getLoggedInUser(); // ✅ Assign the observable
     this.ngZone.runOutsideAngular(() => {
-      // Any Bootstrap-specific JavaScript initialization
     });
   }
 
   toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    this.sidebarToggle.emit();
-
     if (sidebar) {
       sidebar.classList.toggle('active');
       localStorage.setItem('sidebarState', sidebar.classList.contains('active') ? 'open' : 'closed');
     }
+    // Optionally, if using EventEmitter to notify another component
+    this.sidebarToggle.emit();
   }
+
 
   restoreSidebarState() {
     const sidebar = document.getElementById('sidebar');
     const sidebarState = localStorage.getItem('sidebarState');
-    if (sidebar && sidebarState === 'open') {
-      sidebar.classList.add('active');
+    if (sidebar) {
+      // Apply 'active' class based on localStorage, not just add it unconditionally
+      if (sidebarState === 'open') {
+        sidebar.classList.add('active');
+      } else {
+        sidebar.classList.remove('active');
+      }
     }
   }
+
 
   logout() {
     this.authService.logout();
