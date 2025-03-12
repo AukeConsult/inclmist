@@ -13,7 +13,7 @@ export interface ChatEntry {
     counter?: number
     ask: ChatMessage,
     reply: ChatMessage
-    history?: ChatMessage[]
+    history: ChatMessage[]
 }
 
 export interface ChatDialog {
