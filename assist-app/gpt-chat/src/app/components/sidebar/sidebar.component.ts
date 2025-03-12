@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -9,7 +9,13 @@ import {FormsModule} from '@angular/forms';
     styleUrl: './sidebar.component.css',
     imports: [CommonModule, FormsModule]
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit{
   isCollapsed = false;
-  chatHistory = ['Chat 1', 'Chat 2', 'Chat 3']; // Example data
+  chatHistory = [];
+
+  ngOnInit(): void {
+    for (let i = 0; i < 50; i++) {
+      this.chatHistory.push("chat " + i)
+    }
+  }
 }

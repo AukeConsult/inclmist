@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AppUser } from 'shared-library'; // ✅ Import from shared-library
 
 import {
   Auth,
@@ -29,6 +28,7 @@ export class AuthService {
     onAuthStateChanged(this.auth, (user) => {
       this.userSubject.next(user); // Emit user when state changes
     });
+
   }
 
 

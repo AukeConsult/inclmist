@@ -3,14 +3,13 @@ import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RecaptchaModule, RouterLink]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class LoginComponent {
   email: string = '';
@@ -19,9 +18,13 @@ export class LoginComponent {
   showResendVerification: boolean = false;
   user: any = null; // Store the user for resending verification
 
-  @ViewChild('recaptchaRef') recaptchaRef!: RecaptchaComponent;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    if (authService.isLoggedIn())
+    {
+      this.router.navigate(["/home"])
+    }
+  }
 
   async login() {
     this.errorMessage = '';

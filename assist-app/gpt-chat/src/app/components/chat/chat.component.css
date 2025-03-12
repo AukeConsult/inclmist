@@ -163,3 +163,57 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
+
+/* Chat container adjustments for single scroll */
+.chat-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Full height of the viewport */
+  max-width: 100%;
+  overflow-y: auto; /* Allow vertical scroll on the container */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  margin: auto; /* Centering the container if needed */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+/* No longer making chat-messages independently scrollable */
+.chat-messages {
+  flex-grow: 1;
+  padding-bottom: 50px; /* Space at the bottom for the input box */
+}
+
+.chat-input-container {
+  width: 100%; /* Full width */
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #ddd;
+}
+
+/* Ensuring the input container does not have fixed or sticky positioning */
+.chat-input {
+  flex-grow: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  background: #f1f1f1;
+}
+
+.send-btn {
+  background: black;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 50%;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+}
