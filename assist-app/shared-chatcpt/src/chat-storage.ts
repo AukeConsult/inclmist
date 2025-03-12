@@ -7,26 +7,31 @@ const activeQueryDescriptor = new Map<string, QueryDescriptor>
 
 export class ChatStorage {
     constructor() {}
-
     public saveMessage(userId: string, chatMessage: ChatEntry) {
         if(!chatMessage.dialogId) {
+
             const dialog = {
                 id: Guid.create().toString(),
                 userId: userId,
-                name: chatMessage.ask.message,
+                description: chatMessage.ask.message,
                 entries: [],
                 queryDescriptor: this.getQueryDecription(chatMessage.queryId,chatMessage.profileId)
             } as ChatDialog
+
             this.saveDialog(dialog)
             chatMessage.dialogId=dialog.id
+
         }
+
         if(chatMessage.dialogId) {
             const dialog = this.getDialog(chatMessage.dialogId)
+
             if(dialog) {
                 chatMessage.counter = dialog.entries?.length
                 dialog.entries.push(chatMessage)
                 this.saveDialog(dialog)
             }
+
         }
     }
     public saveDialog(dialog: ChatDialog) {
