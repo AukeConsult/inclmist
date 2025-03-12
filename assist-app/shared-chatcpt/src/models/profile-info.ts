@@ -1,5 +1,16 @@
 import {QueryDescriptor} from "./query-descriptor";
 
+export interface ProfileQueryInfo {
+    queries?: QueryDescriptor[]
+    queryRefs?: string[]
+    activeQueryDescriptor?: QueryDescriptor
+}
+
+export interface ProfileSubcrInfo {
+    type: string
+    subscriptions: []
+}
+
 export interface ProfileInfo {
     Id: string
     public: boolean
@@ -9,8 +20,6 @@ export interface ProfileInfo {
     description: string
     pictures: []
     links: []
-    queries?: QueryDescriptor[]
-    queriyRefs?: string[]
-    activeQuery?: QueryDescriptor
-    subscriptions: []
+    subscrInfo?: ProfileSubcrInfo
+    queyInfo?: ProfileQueryInfo
 }
