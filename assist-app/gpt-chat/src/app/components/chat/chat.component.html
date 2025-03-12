@@ -1,6 +1,6 @@
 <div class="chat-container" >
   <!-- Chat messages -->
-  <div class="chat-messages">
+  <div class="chat-messages" #scrollMe>
     <div class="row text-normal" *ngFor="let message of chatHistory">
       <div *ngIf="message.type === 'text'">
         <!-- User message -->
@@ -22,7 +22,7 @@
   </div>
 
   <!-- Chat input box (fixed at the bottom) -->
-  <div class="chat-input-container">
+  <div class="chat-input-container" style="    margin-bottom: 40px;">
     <input type="text" class="chat-input" [(ngModel)]="userMessage"
            placeholder="Type a message..." (keyup.enter)="sendMessage()" />
     <button class="send-btn" (click)="sendMessage()">➤</button>

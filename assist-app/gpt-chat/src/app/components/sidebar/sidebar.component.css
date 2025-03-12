@@ -8,8 +8,11 @@
   position: fixed;
   left: 0; /* Fix sidebar in place */
   top: 60px; /* Adjust for navbar */
+  bottom: 0;
   transition: left 0.3s ease-in-out; /* Animate sidebar */
   border-right: 1px solid #ddd;
+  overflow: hidden; /* Ensures no overflow from the sidebar itself */
+
 }
 
 /* Sidebar hidden state */
@@ -25,9 +28,25 @@
 
 
 .sidebar-content {
+  max-height: 90%; /* Limit height to the height of the sidebar */
+  overflow-y: auto; /* Enables vertical scrolling when needed */
+  padding: 10px;
+}
+
+/* Scrollbar for messages */
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 3px;
+}
+
+.icons-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  padding: 10px 0;
 }
 
 .sidebar-content ul {

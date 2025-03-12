@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import { ChatgptService } from '../../chatgpt.service';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -13,8 +13,19 @@ import {FormsModule} from '@angular/forms';
 export class ChatComponent {
   userMessage = '';
   chatHistory: { role: string, content: string, type: string }[] = [];
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
   constructor(private chatService: ChatgptService) {}
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
+  }
 
   sendMessage() {
     this.chatHistory.push({ role: 'user', content: this.userMessage, type: 'text' });
@@ -24,6 +35,8 @@ export class ChatComponent {
       this.chatHistory.push({ role: 'bot', content: botReply, type: 'text' });
     });
     this.userMessage=''
+    this.scrollToBottom();
+
   }
 
   paragraphs(content: string ): string[] {
