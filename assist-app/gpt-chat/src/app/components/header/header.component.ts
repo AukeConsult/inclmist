@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, NgZone, OnInit, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -17,12 +17,14 @@ export class HeaderComponent implements OnInit {
   user!: Observable<User | null>; // ✅ Observable<User | null>
   private userSubscription!: Subscription; // To manage subscription
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService,private ngZone: NgZone) {}
 
   ngOnInit() {
     this.restoreSidebarState();
     this.user = this.authService.getLoggedInUser(); // ✅ Assign the observable
-
+    this.ngZone.runOutsideAngular(() => {
+      // Any Bootstrap-specific JavaScript initialization
+    });
   }
 
   toggleSidebar() {
@@ -46,7 +48,12 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-
+  goToHome() {
+    this.router.navigate(['/home']);
+  }
+  goToUserProfile() {
+    this.router.navigate(['/user-details']);
+  }
   ngOnDestroy() {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe(); // ✅ Prevent memory leaks

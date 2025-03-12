@@ -1,22 +1,22 @@
 <nav class="navbar navbar-light bg-light fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <!-- Sidebar Toggle Button -->
-    <button class="btn btn-outline-dark me-2" (click)="toggleSidebar()">
+    <button class="btn btn-outline-dark me-2" *ngIf="user | async as currentUser" (click)="toggleSidebar()">
       ☰
     </button>
 
     <!-- App Title -->
-    <a class="navbar-brand" href="#">Assist GPT</a>
+    <a class="navbar-brand" (click)="goToHome()">Assist GPT</a>
 
-    <!-- User Profile and Logout -->
-    <!-- User Profile and Logout -->
-    <!-- ✅ Proper use of async pipe -->
-    <div class="d-flex align-items-center" *ngIf="user | async as currentUser">
-      <span class="me-3">Hello, {{ currentUser?.displayName || 'User' }}</span>
-      <img [src]="currentUser?.photoURL || 'assets/default-profile.png'" alt="Profile Image" class="profile-img">
-      <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+    <!-- User Profile and Dropdown Menu -->
+    <div class="dropdown" *ngIf="user | async as currentUser">
+      <img src="{{currentUser?.photoURL || 'assets/default-profile.png'}}" alt="Profile Image" class="profile-img dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" (click)="goToUserProfile()">profile</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><button class="dropdown-item" (click)="logout()">Logout</button></li>
+      </ul>
     </div>
-
-
   </div>
 </nav>
