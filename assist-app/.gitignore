@@ -1,4 +1,5 @@
 **/secrets.ts
+**/firebase-admin-key.json
 **/.angular/
 **/dist/
 **/node_modules/

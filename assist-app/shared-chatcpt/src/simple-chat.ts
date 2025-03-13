@@ -1,6 +1,6 @@
 import {ChatEntry} from "./models/chat-dialog";
 import {ChatStorage} from "./chat-storage";
-import {apiKeyMain} from "./secrets"
+import {openAiApiKey} from "./secrets"
 
 export class SimpleChat {
     private chatApiUrl = 'https://api.openai.com/v1/chat/completions';
@@ -34,7 +34,7 @@ export class SimpleChat {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + apiKeyMain
+                        "Authorization": "Bearer " + openAiApiKey
                     },
                     body: JSON.stringify(body)
                 })

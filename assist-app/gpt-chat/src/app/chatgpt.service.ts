@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 // @ts-ignore
 import {Observable} from 'rxjs';
-import {apiKeyMain} from "../../secrets"
+import {openAiApiKey} from "../secrets"
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ChatgptService {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKeyMain}`
+      'Authorization': `Bearer ${openAiApiKey}`
     });
 
     const body = {
@@ -57,7 +57,7 @@ export class ChatgptService {
   generateImage(prompt: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKeyMain}`
+      'Authorization': `Bearer ${openAiApiKey}`
     });
 
     const body = {

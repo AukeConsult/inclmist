@@ -19,9 +19,12 @@ export interface DbRefs {
     parameters: string
 }
 
-export interface QueryChatGpt {
+export interface QueryParameters {
+    vendor: string
     modelId: string;
     instructions: string;
+    max_tokens: number,
+    temperature: number,
     files?: FileRefs []
     externalLinks?: LinkRefs []
     apiRefs?: LinkRefs []
@@ -34,5 +37,5 @@ export interface QueryDescriptor {
     description: string
     added: Date
     lastused: Date
-    queryChatGpt: QueryChatGpt
+    queryParameters: QueryParameters []
 }
