@@ -7,7 +7,7 @@ import {QueryDescriptor} from "./query-descriptor";
 export interface ChatMessage {
     // role of message
     role: string,
-    message: string,
+    content: string,
     image?: object
     file?: object
 }
@@ -19,13 +19,14 @@ export interface ChatEntry {
     id?: string
     // used as parameter in the chat
     queryId?: string
-    dialogId?: string
     profileId?: string
+    dialogId?: string
     //
     counter?: number
-    ask: ChatMessage,
-    reply: ChatMessage
-    history: ChatMessage[]
+    entry: ChatMessage
+    modelResult?: any
+    error?: string
+    errorObject?: any
 }
 
 // the dialog with all messages in the dialog
@@ -36,8 +37,11 @@ export interface ChatDialog {
     // generated GUID to identify the dialog
     description: string,
     queryId?: string
+    profileId?: string
     // full descriptor used in the dialog
     // same as pointed to the quryId
     queryDescriptor?: QueryDescriptor;
     entries: ChatEntry []
+    history: ChatMessage[]
+
 }

@@ -1,4 +1,4 @@
-import {ChatDialog, ChatEntry} from "./models/chat-dialog";
+import {ChatDialog, ChatEntry, ChatMessage} from "./models/chat-dialog";
 import {QueryDescriptor} from "./models/query-descriptor";
 import { Guid } from "guid-typescript";
 
@@ -7,35 +7,45 @@ const activeQueryDescriptor = new Map<string, QueryDescriptor>
 
 export class ChatStorage {
     constructor() {}
-    public saveMessage(userId: string, chatMessage: ChatEntry) {
-        if(!chatMessage.dialogId) {
+    public storeChatEntry(userId: string, chatEntry: ChatEntry): ChatEntry | undefined {
+        if(!chatEntry.dialogId) {
 
             const dialog = {
                 id: Guid.create().toString(),
                 userId: userId,
-                description: chatMessage.ask.message,
-                entries: [],
-                queryDescriptor: this.getQueryDecription(chatMessage.queryId,chatMessage.profileId)
+                description: chatEntry.entry.content,
+                queryId: chatEntry.queryId,
+                profileId: chatEntry.profileId,
             } as ChatDialog
 
-            this.saveDialog(dialog)
-            chatMessage.dialogId=dialog.id
+            this.storeDialog(dialog, chatEntry)
+            chatEntry.dialogId=dialog.id
 
         }
 
-        if(chatMessage.dialogId) {
-            const dialog = this.getDialog(chatMessage.dialogId)
-
+        if(chatEntry.dialogId) {
+            const dialog = this.getDialog(chatEntry.dialogId)
             if(dialog) {
-                chatMessage.counter = dialog.entries?.length
-                dialog.entries.push(chatMessage)
-                this.saveDialog(dialog)
+                chatEntry.counter = dialog.entries?.length
+                this.storeDialog(dialog, chatEntry)
+                return chatEntry
             }
-
         }
+        return undefined
+
     }
-    public saveDialog(dialog: ChatDialog) {
+    public storeDialog(dialog: ChatDialog, chatMessage: ChatEntry) {
+
+        if(!dialog.entries)dialog.entries = []
+        if(!dialog.history)dialog.history = []
+
+        dialog.entries.push(chatMessage)
+        dialog.history.push({
+            role: chatMessage.entry.role,
+            content: chatMessage.entry.content
+        } as ChatMessage)
         activeDialogs.set(dialog.id,dialog)
+
     }
     public getDialog(dialogId: string | undefined) :ChatDialog | undefined {
         if(dialogId) {
@@ -46,7 +56,11 @@ export class ChatStorage {
         if(!queryId || !activeQueryDescriptor.has(queryId)) {
             const q = {
                 id: Guid.create().toString(),
-                profileId: profileId
+                profileId: profileId,
+                queryChatGpt: {
+                    modelId: 'gpt-4',
+                    instructions: "This is a test"
+                }
             } as QueryDescriptor
             activeQueryDescriptor.set(q.id,q)
             return q;

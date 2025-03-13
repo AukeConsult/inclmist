@@ -2,7 +2,7 @@
 export interface FileRefs {
     fileName: string
     storageRef: string
-    modeStoreageRef: string
+    modelStoreageRef: string
     fileContent?: object
 }
 
@@ -19,17 +19,20 @@ export interface DbRefs {
     parameters: string
 }
 
-export interface QueryDescriptor {
-    id: string,
-    profileId?: string
-    description: string
-    externalModelId?: string;
+export interface QueryChatGpt {
+    modelId: string;
     instructions: string;
-    maxSizeHistory: number
     files?: FileRefs []
     externalLinks?: LinkRefs []
     apiRefs?: LinkRefs []
     dbRefs?: DbRefs []
+}
+
+export interface QueryDescriptor {
+    id: string,
+    profileId: string
+    description: string
     added: Date
     lastused: Date
+    queryChatGpt: QueryChatGpt
 }
