@@ -22,6 +22,7 @@ export interface ChatEntry {
     queryId?: string
     profileId?: string
     dialogId?: string
+    timeStamp: number
     //
     counter?: number
     queryDescriptor?: QueryDescriptor;
@@ -33,8 +34,8 @@ export interface ChatEntry {
 
 // the dialog with all messages in the dialog
 export interface ChatDialog {
-    id: string,
     // the owner of the dialog
+    id?: string
     userId: string;
     // generated GUID to identify the dialog
     title: string,

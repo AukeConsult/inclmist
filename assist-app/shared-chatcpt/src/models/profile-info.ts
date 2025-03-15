@@ -1,7 +1,7 @@
 import {QueryDescriptor} from "./query-descriptor";
 
 export interface ProfileAdminUser {
-    userid: string
+    userId: string
     role: string
     name: string
 }
@@ -41,20 +41,20 @@ export interface ProfileSubscription {
 // contain everything regarding Admin users
 export interface ProfileAdminUsers {
     canUpdate: boolean
-    users: ProfileAdminUser[]
+    users: ProfileAdminUser []
 }
 
 // basic profile information
 export interface ProfileInfo {
-    Id: string
-    public: boolean
-    profileName: string
-    ownerName: string
+    Id?: string
+    public?: boolean
+    profileName?: string
+    ownerName?: string
     ownerId: string
-    description: string
+    description?: string
     pictures: []
     links: []
     subscriptions?: ProfileSubscription
     queries?: ProfileQueries
-    adminUsers?: ProfileAdminUsers
+    adminUsers: ProfileAdminUsers
 }

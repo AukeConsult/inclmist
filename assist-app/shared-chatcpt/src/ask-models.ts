@@ -2,12 +2,9 @@ import {ChatDialog, ChatEntry, ChatMessage} from "./models/chat-dialog";
 import {ChatStorage} from "./services/chat-storage";
 import {QueryDescriptor, QueryParameters} from "./models/query-descriptor";
 import OpenAI from "openai";
-
 import {openAiApiKey} from "./secrets"
 
-const client = new OpenAI({
-    apiKey: openAiApiKey, // This is the default and can be omitted
-});
+
 
 //
 async function doChatCompletion(
@@ -44,6 +41,9 @@ async function doChatCompletion(
             console.log("input", entry.content)
         })
     }
+    const client = new OpenAI({
+        apiKey: openAiApiKey, // This is the default and can be omitted
+    });
     const ret = await client.chat.completions.create(
         {
             model: parameters.modelId,
@@ -67,44 +67,42 @@ async function doChatCompletion(
 
 export class AskModels {
 
+    public simulate: boolean = true
     constructor(private storeage: ChatStorage) {}
 
-    private async processQuestion(userId:string, chatEntry: ChatEntry ) : Promise<any> {
+    private async processQuestion(chatEntry: ChatEntry ) : Promise<any> {
 
-        const chatDialog = this.storeage.getDialog(chatEntry)
-        let queryDescriptor: QueryDescriptor | undefined
+        if(await this.storeage.initEntry(chatEntry)) {
+            const chatDialog = await this.storeage.getDialog(chatEntry)
+            const queryDescriptor = await this.storeage.getQueryDecription(chatEntry)
+            if(queryDescriptor && chatDialog) {
 
-        if(chatEntry.queryDescriptor) {
-            queryDescriptor=chatEntry.queryDescriptor;
-        } else if(chatEntry.queryId) {
-            queryDescriptor = this.storeage.getQueryDecription(chatEntry.queryId,chatEntry.profileId)
-        }
-        if(queryDescriptor && chatDialog) {
+                const results: ChatMessage[] = []
 
-            chatEntry.userId=userId
+                // only add latest
+                if(chatDialog.history) {
+                    const newhistory = []
+                    newhistory.push(...chatDialog.history)
+                    chatDialog.history = newhistory
+                }
+                for (const parameter of queryDescriptor.queryParameters) {
 
-            const results: ChatMessage[] = []
+                    if(!this.simulate) {
+                        // read model
+                        const results_query = await doChatCompletion(
+                            chatDialog,
+                            parameter,
+                            chatEntry
+                        )
+                        results.push(...results_query)
+                    }
+                }
+                return this.storeage.storeChatEntry(chatEntry, results)
 
-            // only add latest
-            if(chatDialog.history) {
-                const newhistory = []
-                newhistory.push(...chatDialog.history)
-                chatDialog.history = newhistory
+            } else {
+                return {error: "NO-SPECIFICATION"} as ChatEntry
             }
-            for (const parameter of queryDescriptor.queryParameters) {
 
-                // read model
-                const results_query = await doChatCompletion(
-                    chatDialog,
-                    parameter,
-                    chatEntry
-                )
-                results.push(...results_query)
-            }
-            return this.storeage.storeChatEntry(userId, chatEntry, results)
-
-        } else {
-            return {error: "NO-SPECIFICATION"} as ChatEntry
         }
     }
 
