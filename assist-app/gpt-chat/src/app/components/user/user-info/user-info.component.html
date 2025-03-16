@@ -25,6 +25,12 @@
       <input id="password" formControlName="password" type="password" />
     </div>
 
+    <div>
+      <label for="address">Address:</label>
+      <input id="address" formControlName="address" type="text" placeholder="Enter your address" />
+    </div>
+
+
     <button type="submit" [disabled]="userForm?.invalid || loading">Update</button>
   </form>
 </div>

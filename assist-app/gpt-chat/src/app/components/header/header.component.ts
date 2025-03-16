@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { User } from '@angular/fire/auth';
 import {Observable, Subscription} from 'rxjs';
+import { AppUser } from 'shared-library/src';
+
 
 @Component({
   selector: 'app-header',
@@ -14,7 +16,7 @@ import {Observable, Subscription} from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
   @Output() sidebarToggle = new EventEmitter<void>();
-  user!: Observable<User | null>; // ✅ Observable<User | null>
+  user!: Observable<AppUser | null>; // ✅ Observable<User | null>
   private userSubscription!: Subscription; // To manage subscription
 
   constructor(private router: Router, private authService: AuthService,private ngZone: NgZone) {}
