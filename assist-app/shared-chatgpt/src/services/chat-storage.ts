@@ -1,22 +1,24 @@
-import {ChatDialog, ChatEntry, ChatMessage} from "../models/chat-dialog";
-import {QueryDescriptor} from "../models/query-descriptor";
-import * as admin from "firebase-admin";
-import {fireBaseAdminKey} from "../secrets";
-import {ServiceAccount} from "firebase-admin/lib/app/credential";
-import {ProfileAdminUser, ProfileAdminUsers, ProfileQueries, ProfileSubscription} from "../models/profile-info";
-import {ReturnObj} from "../models/return-obj";
-
-const activeDialogs = new Map<string, ChatDialog>
-const activeQueryDescriptor = new Map<string, QueryDescriptor>
-
-admin.initializeApp({credential: admin.credential.cert(fireBaseAdminKey as ServiceAccount)})
-
-const db = admin.firestore()
-const userCollection = db.collection("users-test")
-const profilesCollection = db.collection("profiles-test")
+import {ChatDialog, ChatEntry, ChatMessage} from "shared-library/src/models/chat-dialog";
+import {
+    AppUser,
+    QueryDescriptor,
+    ReturnObj,
+    ProfileAdminUser,
+    ProfileAdminUsers
+} from "shared-library";
+import {app, firestore} from "firebase-admin";
 
 export class ChatStorage {
-    constructor() {}
+
+    private db: firestore.Firestore
+    private userCollection
+    private profilesCollection
+
+    constructor(firebaseApp: app.App) {
+        this.db = firebaseApp.firestore()
+        this.userCollection = this.db.collection("users-test")
+        this.profilesCollection = this.db.collection("profiles-test")
+    }
 
     public async storeChatEntry(chatEntry: ChatEntry, results: ChatMessage[]) {
 
@@ -27,7 +29,7 @@ export class ChatStorage {
                 chatEntry.timeStamp = Date.now()
                 chatEntry.replies = results
                 const dialogRef
-                    = userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId)
+                    = this.userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId)
 
                 const entryRef = dialogRef.collection("entries").doc()
                 await entryRef.set(chatEntry)
@@ -45,20 +47,27 @@ export class ChatStorage {
         return chatEntry
 
     }
-    public async initEntry(chatEntry: ChatEntry)  {
+    async initEntry(chatEntry: ChatEntry)  {
 
         if (!chatEntry.userId) {
-            const doc = userCollection.doc()
-            await doc.set({active: false, userName: "dummy user"})
+            const doc = this.userCollection.doc()
+            await doc.set(
+                {
+                    role: "profileOwner",
+                    displayName: "dummy",
+                    email: "x@xx.no"
+                } as AppUser
+            )
             chatEntry.userId = doc.id
+            await this.userCollection.doc(doc.id).update({userId: doc.id})
         }
-        if(!(await userCollection.doc(chatEntry.userId).get()).exists) {
-            userCollection.doc(chatEntry.userId).set({active: false, userName: "dummy user"})
+        if(!(await this.userCollection.doc(chatEntry.userId).get()).exists) {
+            this.userCollection.doc(chatEntry.userId).set({active: false, userName: "dummy user"})
         }
 
-        var profileRef = profilesCollection.doc()
+        var profileRef = this.profilesCollection.doc()
         if(chatEntry.profileId) {
-            profileRef = profilesCollection.doc(chatEntry.profileId)
+            profileRef = this.profilesCollection.doc(chatEntry.profileId)
         }
 
         if (!chatEntry.profileId || !(await profileRef.get()).exists) {
@@ -81,13 +90,18 @@ export class ChatStorage {
 
             await profileRef.set(profile)
             chatEntry.profileId = profileRef.id
+            await this.userCollection.doc(chatEntry.userId).collection("profileRefs")
+                .doc(chatEntry.profileId).set({
+                    profileId: chatEntry.profileId,
+                    name: profile.profileName
+                })
 
         }
 
         if(chatEntry.queryDescriptor && chatEntry.profileId) {
 
-            const profileRef = profilesCollection.doc(chatEntry.profileId)
-            const queryCollection = profileRef.collection("queries")
+            const profileRef = this.profilesCollection.doc(chatEntry.profileId)
+            const queryCollection = profileRef.collection("trainQueries")
 
             if(!chatEntry.queryId) {
                 const queryRef = queryCollection.doc()
@@ -111,38 +125,38 @@ export class ChatStorage {
             } as ChatDialog
 
             const dialogRef
-                = userCollection.doc(chatEntry.userId).collection("dialogs").doc()
+                = this.userCollection.doc(chatEntry.userId).collection("dialogs").doc()
             await dialogRef.set(dialog)
             chatEntry.dialogId = dialogRef.id
 
         }
 
         if (chatEntry.dialogId) {
-            return (await userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId).get()).exists
+            return (await this.userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId).get()).exists
         } else {
             return false
         }
     }
 
-    public async getDialog(chatEntry: ChatEntry) {
+    async getDialog(chatEntry: ChatEntry) {
         if(chatEntry.userId && chatEntry.dialogId) {
-            const col = userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId)
+            const col = this.userCollection.doc(chatEntry.userId).collection("dialogs").doc(chatEntry.dialogId)
             return {...(await col.get()).data()} as ChatDialog
         } else {
             return undefined
         }
     }
 
-    public async getQueryDecription(chatEntry: ChatEntry) : Promise<QueryDescriptor | undefined>  {
+    async getQueryDecription(chatEntry: ChatEntry) : Promise<QueryDescriptor | undefined>  {
         if(chatEntry.profileId && chatEntry.queryId) {
-            return {...(await profilesCollection.doc(chatEntry.profileId).collection("queries").doc(chatEntry.queryId).get()).data()} as QueryDescriptor
+            return {...(await this.profilesCollection.doc(chatEntry.profileId).collection("queries").doc(chatEntry.queryId).get()).data()} as QueryDescriptor
         } else {
             return undefined
         }
     }
 
     public async readDialog(dialogRef: {userId: string, dialogId: string}) : Promise<ReturnObj> {
-        const dialogs = userCollection.doc(dialogRef.userId).collection("dialogs")
+        const dialogs = this.userCollection.doc(dialogRef.userId).collection("dialogs")
         return dialogs.doc(dialogRef.dialogId).get()
             .then(async (r)=> {
                 const snap = await r.ref.collection("dialogs").get()

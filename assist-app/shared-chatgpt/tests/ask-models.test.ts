@@ -1,21 +1,30 @@
-import { AskModels } from "../src/ask-models"
-import {ChatStorage} from "../src/services/chat-storage";
-import {ChatEntry, ChatMessage} from "../src/models/chat-dialog";
-import {Guid} from "guid-typescript";
+import {
+    ChatEntry,
+    ChatMessage,
+    ModelEnum,
+    VendorEnum
+} from "shared-library";
 
-const userId = Guid.create().toString()
+import {Guid} from "guid-typescript";
+import modelApp from "../src";
+
+const userId = "leif"
+const app = modelApp
 
 describe('test simple chat', () => {
 
     it('open simple chat',  async () => {
-        const chatStorage = new ChatStorage()
-        const s = new AskModels(chatStorage);
-        const retMessage = await s.askQuestion({
+
+        const model = app.askModel();
+        const chatStorage = model.storeage
+
+        const retMessage = await model.askQuestion({
             userId: userId,
             queryDescriptor: {
                 profileId: "leifprofile",
                 queryParameters: [{
-                    modelId: 'gpt-4',
+                    vendor: VendorEnum.chatGpt,
+                    modelId: ModelEnum.gpt4,
                     instructions: "This is a test"
                 }]
             },
@@ -34,14 +43,17 @@ describe('test simple chat', () => {
     },1000*300);
 
     it('make some messages', async () => {
-        const chatStorage = new ChatStorage()
-        const s = new AskModels(chatStorage);
-        var retMessage = await s.askQuestion({
+
+        const model = app.askModel();
+        const chatStorage = model.storeage
+
+        var retMessage = await model.askQuestion({
             userId: userId,
             queryDescriptor: {
-                profileId: "leifprofile",
+                profileId: "leifprofile2",
                 queryParameters: [{
-                    modelId: 'gpt-4',
+                    vendor: VendorEnum.chatGpt,
+                    modelId: ModelEnum.gpt4,
                     instructions: "This is a test for chatgpt, please be short"
                 }]
             },
@@ -68,7 +80,7 @@ describe('test simple chat', () => {
                 retMessage.entry = [{
                     content: questions[i]
                 } ]
-                retMessage = await s.askQuestion(retMessage)
+                retMessage = await model.askQuestion(retMessage)
                 expect(retMessage).toBeDefined()
                 if(retMessage) {
                     //expect(chatStorage.readDialog(retMessage)?.entries.length).toBe(i+1)

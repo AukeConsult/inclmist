@@ -1,7 +1,8 @@
 import {QueryDescriptor} from "./query-descriptor";
+import {VendorEnum} from "./enum-types";
 
 export interface ProfileAdminUser {
-    userid: string
+    userId: string
     role: string
     name: string
 }
@@ -25,36 +26,72 @@ export interface ProfileQueries {
     activeQueryDescriptor?: QueryDescriptor
 }
 
+// ALL subsriptions on the profile
 // contain everthing regarding subscriptions
 export interface ProfileSubscription {
+
+    // is possible to subscribe
     canSubscr: boolean
     maxSubscriptions: number
+
+    // fee for signon
     signonFee: number
+
+    // month fee for a subsription
     monthlyFee: number
+
+    // invited users
     invites: ProfileUser []
+    // requested memberslip from users
     requests: ProfileUser []
+
+    // subsriptioned users
     subscriptions: ProfileUser []
-    payments: []
-    openPayments: []
+
+    // payment done to profile (for later)
+    paiedInvoices: []
+
+    // iinvoices, not payed
+    openInvoices: []
+
+}
+
+export interface ProfileSettings {
+    models: { modelVendor: VendorEnum, modelId: string, apyKey: string } []
 }
 
 // contain everything regarding Admin users
 export interface ProfileAdminUsers {
     canUpdate: boolean
-    users: ProfileAdminUser[]
+    users: ProfileAdminUser []
 }
 
+//
 // basic profile information
-export interface ProfileInfo {
-    Id: string
-    public: boolean
+//
+export interface Profile {
+
+    public?: boolean
     profileName: string
-    ownerName: string
+    imageUrl: string
+    ownerName?: string
+
+    // reference to owner userid
     ownerId: string
-    description: string
-    pictures: []
-    links: []
+    description?: string
+
+    // settings for profile
+    profileSetting: ProfileSettings
+
+    // list of user subsriptions to profile
     subscriptions?: ProfileSubscription
-    queries?: ProfileQueries
-    adminUsers?: ProfileAdminUsers
+
+    // querySpcifications under work
+    workQueries?: ProfileQueries
+
+    // querySpcifications publiched
+    publicedQueries?: ProfileQueries
+
+    // list of users that can admin the profile
+    adminUsers: ProfileAdminUsers
 }
