@@ -1,7 +1,28 @@
 <div class="container">
-  <h2>Update User Information</h2>
+  <h2>User Information</h2>
+  <div *ngIf="!loading && user && !isEdit">
+    <div><i class="fas fa-user"></i> {{ user.displayName }}</div>
+    <div><i class="fas fa-phone"></i> {{ user.phoneNumber }}</div>
+    <div><i class="fas fa-envelope"></i> {{ user.email }}</div>
+    <div><i class="fas fa-home"></i>
+      {{ user.address?.street }}, {{ user.address?.city }}, {{ user.address?.state }}, {{ user.address?.postalCode }}, {{ user.address?.country }}
+    </div>
+    <div><i class="fas fa-briefcase"></i> {{ user.jobTitle }}</div>
+    <div><i class="fas fa-birthday-cake"></i> {{ user.birthdate | date }}</div>
+    <div><i class="fas fa-flag"></i> {{ user.nationality }}</div>
+    <div><i class="fas fa-hashtag"></i> Social Media:
+      <ul>
+        <li><i class="fab fa-facebook"></i> {{ user.socialMediaHandles?.facebook }}</li>
+        <li><i class="fab fa-twitter"></i> {{ user.socialMediaHandles?.twitter }}</li>
+        <li><i class="fab fa-linkedin"></i> {{ user.socialMediaHandles?.linkedIn }}</li>
+      </ul>
+    </div>
+    <div><i class="fas fa-language"></i> {{ user.languagePreferences?.join(', ') }}</div>
+    <button (click)="toggleEdit()"><i class="fas fa-edit"></i> Edit</button>
+  </div>
 
-  <form *ngIf="!loading && user && userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+  <form *ngIf="!loading && user && isEdit" [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div>
       <label for="displayName">Name:</label>
       <input id="displayName" formControlName="displayName" />
@@ -10,9 +31,6 @@
     <div>
       <label for="phoneNumber">Phone Number:</label>
       <input id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="+1234567890" />
-      <div *ngIf="userForm?.get('phoneNumber')?.invalid && userForm?.get('phoneNumber')?.dirty">
-        Please enter a valid phone number (e.g., +1234567890).
-      </div>
     </div>
 
     <div>
@@ -25,12 +43,67 @@
       <input id="password" formControlName="password" type="password" />
     </div>
 
-    <div>
-      <label for="address">Address:</label>
-      <input id="address" formControlName="address" type="text" placeholder="Enter your address" />
+    <div formGroupName="address">
+      <div>
+        <label for="street">Street:</label>
+        <input id="street" formControlName="street" type="text" placeholder="Enter street" />
+      </div>
+      <div>
+        <label for="city">City:</label>
+        <input id="city" formControlName="city" type="text" placeholder="Enter city" />
+      </div>
+      <div>
+        <label for="state">State:</label>
+        <input id="state" formControlName="state" type="text" placeholder="Enter state" />
+      </div>
+      <div>
+        <label for="postalCode">Postal Code:</label>
+        <input id="postalCode" formControlName="postalCode" type="text" placeholder="Enter postal code" />
+      </div>
+      <div>
+        <label for="country">Country:</label>
+        <input id="country" formControlName="country" type="text" placeholder="Enter country" />
+      </div>
     </div>
 
+    <div>
+      <label for="jobTitle">Job Title:</label>
+      <input id="jobTitle" formControlName="jobTitle" type="text" placeholder="Enter your job title" />
+    </div>
 
-    <button type="submit" [disabled]="userForm?.invalid || loading">Update</button>
+    <div>
+      <label for="birthdate">Birthdate:</label>
+      <input id="birthdate" formControlName="birthdate" type="date" />
+    </div>
+
+    <div>
+      <label for="nationality">Nationality:</label>
+      <input id="nationality" formControlName="nationality" type="text" placeholder="Enter your nationality" />
+    </div>
+
+    <div formGroupName="socialMediaHandles">
+      <div>
+        <label for="facebook">Facebook:</label>
+        <input id="facebook" formControlName="facebook" type="text" placeholder="Facebook URL" />
+      </div>
+      <div>
+        <label for="twitter">Twitter:</label>
+        <input id="twitter" formControlName="twitter" type="text" placeholder="Twitter Handle" />
+      </div>
+      <div>
+        <label for="linkedIn">LinkedIn:</label>
+        <input id="linkedIn" formControlName="linkedIn" type="text" placeholder="LinkedIn Profile" />
+      </div>
+    </div>
+
+    <div formArrayName="languagePreferences">
+      <div *ngFor="let control of languagePreferences.controls; let i = index">
+        <input type="checkbox" [formControlName]="i">
+        <label>{{ languages[i] }}</label>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="userForm.invalid">Save Changes</button>
+    <button type="button" (click)="toggleEdit()">Cancel</button>
   </form>
 </div>

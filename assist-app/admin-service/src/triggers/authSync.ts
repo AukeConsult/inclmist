@@ -7,6 +7,7 @@ exports.syncUserOnCreate = functions.auth.user().onCreate(async (user) => {
     // Set up default values for extended attributes
     const additionalUserData = {
         address: '',
+        jobTitle : ''
         // other fields can be initialized here
     };
 

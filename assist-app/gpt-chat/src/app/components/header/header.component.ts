@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/home']);
   }
   goToUserProfile() {
-    this.router.navigate(['/user-details']);
+    this.router.navigate(['/user-profile']);
   }
   ngOnDestroy() {
     if (this.userSubscription) {

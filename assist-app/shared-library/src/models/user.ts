@@ -3,7 +3,22 @@ export interface AppUser {
     email: string;
     displayName: string;
     phoneNumber?: string;
-    address?: string;
-    photoURL?:any,
+    photoURL?: string;
     password?: string;
+    address?: {
+        street?: string;
+        city?: string;
+        state?: string;
+        postalCode?: string;
+        country?: string;
+    };
+    jobTitle?: string;
+    birthdate?: Date;
+    nationality?: string;
+    socialMediaHandles?: {
+        facebook?: string;
+        twitter?: string;
+        linkedIn?: string;
+    };
+    languagePreferences?: string[];
 }

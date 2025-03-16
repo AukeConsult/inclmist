@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { CommonModule } from '@angular/common';
-import {UserService} from '../../../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { AppUser } from 'shared-library/src';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-user-info',
   standalone: true,
-  imports: [
-    CommonModule, // Required for Angular directives
-    ReactiveFormsModule // ✅ Ensure Reactive Forms are recognized
-  ],
+  selector: 'app-user-info',
   templateUrl: './user-info.component.html',
-  styleUrl: './user-info.component.css'
+  imports: [
+    ReactiveFormsModule,
+    CommonModule
+  ],
+  styleUrls: ['./user-info.component.css']
 })
 export class UserInfoComponent implements OnInit {
   userForm!: FormGroup;
-  user: AppUser = null;
+  user: AppUser | null = null;
   loading = true;
+  isEdit = false;  // Toggle for showing the edit form
+  languages = ['English', 'Norwegian'];  // Example languages
 
   constructor(private fb: FormBuilder, private authService: AuthService, private userService: UserService) {}
 
@@ -27,39 +29,62 @@ export class UserInfoComponent implements OnInit {
       displayName: ['', [Validators.required, Validators.minLength(3)]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^\+\d{6,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      password: [''], // Optional
-      address: [''], // Add this line if you have address in your model
+      password: [''],
+      address: this.fb.group({
+        street: [''],
+        city: [''],
+        state: [''],
+        postalCode: [''],
+        country: ['']
+      }),
+      jobTitle: [''],
+      birthdate: [''],
+      nationality: [''],
+      socialMediaHandles: this.fb.group({
+        facebook: [''],
+        twitter: [''],
+        linkedIn: ['']
+      }),
+      languagePreferences: this.buildLanguages(this.languages)
     });
 
     this.authService.getLoggedInUser().subscribe(async (user) => {
       this.user = user;
       this.loading = false;
-
       if (user) {
-        // Assume getUserDetails is a method that fetches the user details from Firestore
         const userDetails = await this.userService.getUserDetails(user.uid);
-        this.userForm.patchValue({
-          displayName: userDetails.displayName || '',
-          phoneNumber: userDetails.phoneNumber || '',
-          email: userDetails.email || '',
-          address: userDetails.address || '', // Patch the address if available
-        });
+        this.userForm.patchValue(userDetails);
+        this.user = userDetails;
       }
     });
   }
 
+  buildLanguages(languages: string[]): FormArray {
+    return this.fb.array(languages.map(language => this.fb.control(false)));
+  }
+
+  get languagePreferences(): FormArray {
+    return this.userForm.get('languagePreferences') as FormArray;
+  }
+
+  toggleEdit() {
+    this.isEdit = !this.isEdit;
+  }
 
   async onSubmit() {
     if (this.userForm.valid && this.user) {
       try {
-        // Pass the whole form value which matches the AppUser model
-        await this.userService.updateUserInfo(this.user.uid, this.userForm.value);
+        const formValue = { ...this.userForm.value };
+        formValue.languagePreferences = formValue.languagePreferences
+          .map((checked: boolean, index: number) => checked ? this.languages[index] : null)
+          .filter(Boolean);
+
+        await this.userService.updateUserInfo(this.user.uid, formValue);
         alert('Profile updated successfully!');
+        this.toggleEdit();  // Hide the form after successful update
       } catch (error: any) {
         alert(error.message);
       }
     }
   }
-
-
 }
