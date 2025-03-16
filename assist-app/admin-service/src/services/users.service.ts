@@ -1,15 +1,15 @@
-import * as fbAdmin from "firebase-admin";
 import { AppUser } from "shared-library";
+import { firestore } from "firebase-admin";
 
 export const createUser = async (name: string, email: string) => {
-    const db = fbAdmin.firestore()
+    const db = firestore()
     const userRef = db.collection("users-dummy").doc();
     await userRef.set({ name, email });
     return userRef.id;
 };
 
 export const updateUser = async (appUser: AppUser) => {
-    const db = fbAdmin.firestore()
+    const db = firestore()
 
     if(appUser.uid && (await db.collection("users").doc(appUser.uid).get()).exists)  {
 
@@ -35,7 +35,7 @@ export const updateUser = async (appUser: AppUser) => {
 };
 
 export const fetchUsers = async () => {
-    const db = fbAdmin.firestore()
+    const db = firestore()
     const snapshot = await db.collection("users").get();
     return snapshot.docs.map(doc => {
         return ({

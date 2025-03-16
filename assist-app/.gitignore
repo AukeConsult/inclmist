@@ -2,6 +2,7 @@
 **/firebase-admin-key.json
 **/.angular/
 **/dist/
+**/lib/
 **/node_modules/
 node_modules/
 

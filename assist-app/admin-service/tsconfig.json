@@ -2,15 +2,14 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "noImplicitReturns": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
-    "outDir": "dist",
-    "sourceMap": true,
+    "declaration": true,
+    "outDir": "lib",
     "strict": true,
+    "types": ["jest"]
   },
   "compileOnSave": true,
-  "include": ["src/**/*"]  // ✅ Make sure the `src/` folder exists inside `functions/`
+  "include": [
+    "src/**/*",
+    "tests/**/*.test.ts"
+  ]
 }

@@ -1,17 +1,14 @@
 import { deleteUserOnRemove } from "./triggers/authSync";
-import * as fbAdmin from "firebase-admin";
 import {onCall} from "firebase-functions/v2/https";
 import {getUserByEmail, getUserByUID, listUsers} from "./services/auth.service";
 import {createUser, fetchUsers, updateUser} from "./services/users.service";
-
-fbAdmin.initializeApp();
+import * as admin from "firebase-admin";
+admin.initializeApp()
 
 exports.deleteUserOnRemove = deleteUserOnRemove;
-
 exports.createUser = onCall(async (request) => {
     return createUser(request.data.name, request.data.email)
 })
-
 exports.updateUser = onCall(async (request) => {
     return updateUser(request.data.appUser)
 })
@@ -26,10 +23,6 @@ exports.getUserById = onCall(async (request) => {
 
 exports.getUserByEmail = onCall(async (request) => {
     return getUserByEmail(request.data.email)
-})
-
-exports.listUsers = onCall(async () => {
-    return listUsers()
 })
 
 exports.listUsers = onCall(async () => {
