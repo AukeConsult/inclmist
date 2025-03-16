@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import { ChatgptService } from '../../chatgpt.service';
+import { ChatgptService } from '../../services/chatgpt.service';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
