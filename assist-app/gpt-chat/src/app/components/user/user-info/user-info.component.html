@@ -1,50 +1,119 @@
 <div class="container">
-  <h5>Personal informations</h5>
+  <div class="header">
+    <h5>Personal informations</h5>
+    <!-- Global Edit Mode Toggle Button -->
+    <button
+      type="button"
+      class="global-edit-button"
+      (click)="toggleGlobalEditMode()"
+      [title]="editMode ? 'Exit Edit Mode' : 'Enter Edit Mode'">
+      <i [ngClass]="editMode ? 'fas fa-times' : 'fas fa-edit'"></i>
+    </button>
+  </div>
+
   <div *ngIf="!loading && user">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
+      <!-- Main Fields -->
       <div *ngFor="let field of mainFields" class="form-group">
-        <i [class]="field.icon"></i>
-        <ng-container *ngIf="field.editing; else viewMainTemplate">
-          <input [formControlName]="field.key" [type]="field.type ? field.type : 'text'">
+        <i [class]="field.icon" [title]="field.label"></i>
+
+        <!-- SPECIAL CASE FOR LANGUAGES FIELD -->
+        <ng-container *ngIf="field.key === 'languagePreferences' && field.editing; else normalFieldTemplate">
+          <div class="dropdown-container">
+            <button type="button" class="dropdown-button" (click)="toggleLanguageDropdown()">
+              Select Languages ▼
+            </button>
+
+            <div class="dropdown-list" *ngIf="languageDropdownOpen">
+              <div *ngFor="let lang of availableLanguages" class="checkbox-option">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="isLanguageSelected(lang)"
+                    (change)="onLanguageToggle(lang, $event)">
+                  {{ lang }}
+                </label>
+              </div>
+            </div>
+          </div>
         </ng-container>
-        <ng-template #viewMainTemplate>{{ user[field.key] }}</ng-template>
-        <button type="button" (click)="toggleEditing(field)" class="edit-button">
-          <i class="fas fa-edit"></i>
+
+        <!-- Normal Field Template -->
+        <ng-template #normalFieldTemplate>
+          <ng-container *ngIf="field.editing; else viewFieldTemplate">
+            <input [formControlName]="field.key" [type]="field.type || 'text'" [placeholder]="field.label" />
+          </ng-container>
+
+          <ng-template #viewFieldTemplate>
+            {{ field.key === 'languagePreferences'
+            ? (user[field.key] ? user[field.key].join(' ') : 'None')
+            : user[field.key] }}
+          </ng-template>
+        </ng-template>
+
+        <!-- Individual Edit/Cancel Buttons, visible only in editMode -->
+        <button
+          *ngIf="editMode"
+          type="button"
+          (click)="toggleEditing(field)"
+          class="edit-button"
+          [title]="field.editing ? 'Cancel editing ' + field.label : 'Edit ' + field.label">
+          <i [ngClass]="field.editing ? 'fas fa-times' : 'fas fa-edit'"></i>
         </button>
       </div>
+
       <!-- Address Section -->
       <h5>Address</h5>
-      <!-- Other Fields -->
       <div formGroupName="address" *ngFor="let field of addressFields">
         <div class="form-group">
-          <i [class]="field.icon"></i>
+          <i [class]="field.icon" [title]="field.label"></i>
+
           <ng-container *ngIf="field.editing; else viewAddressTemplate">
-            <input [formControlName]="field.key" [type]="field.type">
+            <input [formControlName]="field.key" [type]="field.type" [placeholder]="field.label" />
           </ng-container>
-          <ng-template #viewAddressTemplate>{{ userForm.get('address').get(field.key).value }}</ng-template>
-          <button type="button" (click)="toggleEditing(field)" class="edit-button">
-            <i class="fas fa-edit"></i>
+
+          <ng-template #viewAddressTemplate>
+            {{ userForm.get('address').get(field.key).value }}
+          </ng-template>
+
+          <button
+            *ngIf="editMode"
+            type="button"
+            (click)="toggleEditing(field)"
+            class="edit-button"
+            [title]="field.editing ? 'Cancel editing ' + field.label : 'Edit ' + field.label">
+            <i [ngClass]="field.editing ? 'fas fa-times' : 'fas fa-edit'"></i>
           </button>
         </div>
       </div>
 
-      <!-- Social Media Handles -->
+      <!-- Social Media Section -->
       <h5>Social Media</h5>
       <div formGroupName="socialMediaHandles" *ngFor="let field of socialFields">
         <div class="form-group">
-          <i [class]="field.icon"></i>
+          <i [class]="field.icon" [title]="field.label"></i>
+
           <ng-container *ngIf="field.editing; else viewSocialTemplate">
-            <input [formControlName]="field.key" [type]="field.type">
+            <input [formControlName]="field.key" [type]="field.type" [placeholder]="field.label" />
           </ng-container>
-          <ng-template #viewSocialTemplate>{{ userForm.get('socialMediaHandles').get(field.key).value }}</ng-template>
-          <button type="button" (click)="toggleEditing(field)" class="edit-button">
-            <i class="fas fa-edit"></i>
+
+          <ng-template #viewSocialTemplate>
+            {{ userForm.get('socialMediaHandles').get(field.key).value }}
+          </ng-template>
+
+          <button
+            *ngIf="editMode"
+            type="button"
+            (click)="toggleEditing(field)"
+            class="edit-button"
+            [title]="field.editing ? 'Cancel editing ' + field.label : 'Edit ' + field.label">
+            <i [ngClass]="field.editing ? 'fas fa-times' : 'fas fa-edit'"></i>
           </button>
         </div>
       </div>
 
-      <button type="submit" [disabled]="userForm.invalid">Save All Changes</button>
+      <button type="submit" [disabled]="userForm.invalid" *ngIf="editMode">Save All Changes</button>
     </form>
   </div>
 </div>

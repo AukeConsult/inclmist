@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
-import { AppUser } from 'shared-library';
-import { CommonModule } from '@angular/common';
+import { AppUser } from 'shared-library/src';
+import {CommonModule} from '@angular/common';
+import {OutsideClickDirective} from '../../../directives/outside-click.directive';
 
 @Component({
   standalone:true,
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class UserInfoComponent implements OnInit {
   userForm!: FormGroup;
@@ -20,6 +21,16 @@ export class UserInfoComponent implements OnInit {
   mainFields: any[];  // Specific to non-address and non-social media
   addressFields: any[];  // Specific to address
   socialFields: any[];  // Specific to social media handles
+  availableLanguages: string[] = [
+    'English',
+    'Norwegian',
+    'French',
+    'Spanish',
+    'German'
+  ];
+  languageDropdownOpen: boolean = false;
+  editMode: boolean = false;
+
 
   constructor(private fb: FormBuilder, private authService: AuthService, private userService: UserService) {
     this.initializeFields();
@@ -36,6 +47,42 @@ export class UserInfoComponent implements OnInit {
         });
       }
     });
+  }
+
+  toggleGlobalEditMode(): void {
+    this.editMode = !this.editMode;
+
+    // If we leave edit mode, reset all field edits
+    if (!this.editMode) {
+      [...this.mainFields, ...this.addressFields, ...this.socialFields].forEach(field => field.editing = false);
+    }
+  }
+
+  toggleLanguageDropdown(): void {
+    this.languageDropdownOpen = !this.languageDropdownOpen;
+  }
+
+  isLanguageSelected(language: string): boolean {
+    const selectedLanguages = this.userForm.get('languagePreferences').value || [];
+    return selectedLanguages.includes(language);
+  }
+
+  onLanguageToggle(language: string, event: Event): void {
+    const selectedLanguages = this.userForm.get('languagePreferences').value || [];
+    const checkbox = event.target as HTMLInputElement;
+
+    if (checkbox.checked) {
+      if (!selectedLanguages.includes(language)) {
+        selectedLanguages.push(language);
+      }
+    } else {
+      const index = selectedLanguages.indexOf(language);
+      if (index >= 0) {
+        selectedLanguages.splice(index, 1);
+      }
+    }
+
+    this.userForm.get('languagePreferences').setValue(selectedLanguages);
   }
 
   initializeFields() {
@@ -62,11 +109,13 @@ export class UserInfoComponent implements OnInit {
       { key: 'twitter', label: 'Twitter', icon: 'fab fa-twitter', editing: false, type: 'text' },
       { key: 'linkedIn', label: 'LinkedIn', icon: 'fab fa-linkedin', editing: false, type: 'url' }
     ];
+
     this.mainFields = this.fields.filter(f => !this.addressFields.concat(this.socialFields).some(af => af.key === f.key));
   }
 
   initializeForm(userData: AppUser) {
-    this.userForm = this.fb.group({
+    languagePreferences: [userData.languagePreferences || []]
+      this.userForm = this.fb.group({
       displayName: [userData.displayName || '', [Validators.required, Validators.minLength(3)]],
       phoneNumber: [userData.phoneNumber || '', [Validators.required, Validators.pattern(/^\+\d{6,15}$/)]],
       email: [userData.email || '', [Validators.required, Validators.email]],
@@ -90,10 +139,15 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
-  toggleEditing(field): void {
+  toggleEditing(field: any): void {
     field.editing = !field.editing;
     if (field.editing) {
-      this.userForm.get(field.key).setValue(this.user[field.key]);
+      const value = this.user[field.key];
+      if (field.key === 'languagePreferences') {
+        this.userForm.get(field.key).setValue(value || []);
+      } else {
+        this.userForm.get(field.key).setValue(value);
+      }
     }
   }
 
@@ -111,4 +165,7 @@ export class UserInfoComponent implements OnInit {
         .catch(error => alert('Error updating profile: ' + error.message));
     }
   }
+
+
+
 }
