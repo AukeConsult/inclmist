@@ -1,30 +1,32 @@
 import * as fbAdmin from "firebase-admin";
 import * as functions from "firebase-functions/v1";
-
+const admin = require('firebase-admin');
+admin.initializeApp();
 // ✅ Sync Firebase Auth User to Firestore on Create
-export const syncUserOnCreate = functions.auth.user().onCreate(async (userRecord) => {
+exports.syncUserOnCreate = functions.auth.user().onCreate(async (user) => {
+    // Set up default values for extended attributes
+    const additionalUserData = {
+        address: '',
+        jobTitle : ''
+        // other fields can be initialized here
+    };
 
-    if (!userRecord) return;
+    // Merge auth user data with additional data
+    const fullUserData = {
+        uid: user.uid,
+        email: user.email || null,
+        displayName: user.displayName || "Unnamed",
+        emailVerified: user.emailVerified,
+        ...additionalUserData,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
 
-    const db = fbAdmin.firestore();
-    if(!(await db.collection("users").doc(userRecord.uid).get()).exists) {
-        await db.collection("users").doc(userRecord.uid).set({
-                role: 'user',
-                userId: userRecord.uid,
-                email: userRecord.email || null,
-                displayName: userRecord.displayName || "Unnamed",
-                photoURL: userRecord.photoURL,
-                userRecord: userRecord,
-                createdAt: fbAdmin.firestore.FieldValue.serverTimestamp(),
-            }
-        );
-    } else {
-        await db.collection("users").doc(userRecord.uid).update({
-                userRecord: userRecord
-            }
-        );
+    try {
+        await admin.firestore().collection('users').doc(user.uid).set(fullUserData);
+        console.log(`User ${user.uid} synced to Firestore with extended attributes`);
+    } catch (error) {
+        console.error('Error syncing user to Firestore:', error);
     }
-    console.log(`🔥 User ${userRecord.uid} synced to Firestore`);
 });
 
 // ✅ Delete User from Firestore on Auth Deletion
@@ -35,3 +37,4 @@ export const deleteUserOnRemove = functions.auth.user().onDelete(async (user) =>
     await db.collection("users").doc(user.uid).delete();
     console.log(`🗑️ User ${user.uid} deleted from Firestore`);
 });
+

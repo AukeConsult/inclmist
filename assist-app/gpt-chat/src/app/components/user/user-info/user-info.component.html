@@ -1,30 +1,50 @@
 <div class="container">
-  <h2>Update User Information</h2>
+  <h5>Personal informations</h5>
+  <div *ngIf="!loading && user">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
-  <form *ngIf="!loading && user && userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="displayName">Name:</label>
-      <input id="displayName" formControlName="displayName" />
-    </div>
-
-    <div>
-      <label for="phoneNumber">Phone Number:</label>
-      <input id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="+1234567890" />
-      <div *ngIf="userForm?.get('phoneNumber')?.invalid && userForm?.get('phoneNumber')?.dirty">
-        Please enter a valid phone number (e.g., +1234567890).
+      <div *ngFor="let field of mainFields" class="form-group">
+        <i [class]="field.icon"></i>
+        <ng-container *ngIf="field.editing; else viewMainTemplate">
+          <input [formControlName]="field.key" [type]="field.type ? field.type : 'text'">
+        </ng-container>
+        <ng-template #viewMainTemplate>{{ user[field.key] }}</ng-template>
+        <button type="button" (click)="toggleEditing(field)" class="edit-button">
+          <i class="fas fa-edit"></i>
+        </button>
       </div>
-    </div>
+      <!-- Address Section -->
+      <h5>Address</h5>
+      <!-- Other Fields -->
+      <div formGroupName="address" *ngFor="let field of addressFields">
+        <div class="form-group">
+          <i [class]="field.icon"></i>
+          <ng-container *ngIf="field.editing; else viewAddressTemplate">
+            <input [formControlName]="field.key" [type]="field.type">
+          </ng-container>
+          <ng-template #viewAddressTemplate>{{ userForm.get('address').get(field.key).value }}</ng-template>
+          <button type="button" (click)="toggleEditing(field)" class="edit-button">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+      </div>
 
-    <div>
-      <label for="email">Email:</label>
-      <input id="email" formControlName="email" type="email" />
-    </div>
+      <!-- Social Media Handles -->
+      <h5>Social Media</h5>
+      <div formGroupName="socialMediaHandles" *ngFor="let field of socialFields">
+        <div class="form-group">
+          <i [class]="field.icon"></i>
+          <ng-container *ngIf="field.editing; else viewSocialTemplate">
+            <input [formControlName]="field.key" [type]="field.type">
+          </ng-container>
+          <ng-template #viewSocialTemplate>{{ userForm.get('socialMediaHandles').get(field.key).value }}</ng-template>
+          <button type="button" (click)="toggleEditing(field)" class="edit-button">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+      </div>
 
-    <div>
-      <label for="password">New Password (optional):</label>
-      <input id="password" formControlName="password" type="password" />
-    </div>
-
-    <button type="submit" [disabled]="userForm?.invalid || loading">Update</button>
-  </form>
+      <button type="submit" [disabled]="userForm.invalid">Save All Changes</button>
+    </form>
+  </div>
 </div>

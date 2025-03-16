@@ -12,6 +12,7 @@ import {
   GoogleAuthProvider,
   sendEmailVerification, updateProfile, updatePassword, updateEmail, onAuthStateChanged
 } from '@angular/fire/auth';
+import { AppUser } from 'shared-library/src';
 
 import { Router } from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
@@ -22,17 +23,35 @@ import {doc, Firestore, getDoc, setDoc} from '@angular/fire/firestore';
 })
 export class AuthService {
   private recaptchaVerifier!: RecaptchaVerifier;
-  private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private userSubject: BehaviorSubject<AppUser | null> = new BehaviorSubject<AppUser | null>(null);
 
-  constructor(private auth: Auth,private router: Router,private firestore: Firestore) {
-    onAuthStateChanged(this.auth, (user) => {
-      this.userSubject.next(user); // Emit user when state changes
+  constructor(private auth: Auth, private router : Router, private firestore : Firestore) {
+    this.auth.onAuthStateChanged((user) => {
+      if (user) {
+        const appUser: {
+          uid: string;
+          photoURL: string;
+          emailVerified: boolean;
+          phoneNumber: string;
+          displayName: string;
+          email: string
+        } = {
+          uid: user.uid,
+          email: user.email!,
+          displayName: user.displayName || '',
+          phoneNumber: user.phoneNumber,
+          photoURL: user.photoURL,
+          emailVerified: user.emailVerified
+        };
+        this.userSubject.next(appUser);
+      } else {
+        this.userSubject.next(null);
+      }
     });
-
   }
 
 
-  getLoggedInUser(): Observable<User | null> {
+  getLoggedInUser(): Observable<AppUser | null> {
     return this.userSubject.asObservable();
   }
 

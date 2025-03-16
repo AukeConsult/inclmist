@@ -1,0 +1,17 @@
+.user-profile-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.profile-column, .profile-lists-column {
+  flex: 1;  /* Each column takes equal space */
+  padding: 10px; /* Adjust padding as necessary */
+}
+
+/* Optional: Add media queries for responsive adjustments */
+@media (max-width: 600px) {
+  .user-profile-container {
+    flex-direction: column;
+  }
+}
