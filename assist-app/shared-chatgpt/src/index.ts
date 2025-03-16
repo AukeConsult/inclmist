@@ -1,5 +1,5 @@
 import {fireBaseAdminKey, openAiApiKey} from "./secrets";
-import {AskModels} from "./services/ask-models";
+import {TrainModels} from "./services/train-models";
 import {ServiceAccount} from "firebase-admin/lib/app/credential";
 import * as admin from "firebase-admin";
 import {app} from "firebase-admin";
@@ -14,15 +14,15 @@ export interface ModelApp {
     appName: string
     modelAccount: ModelAccount,
     fireBaseAdmin: App,
-    askModel(): AskModels
+    trainModel(skipModel: boolean): TrainModels
 }
 
 const modelApp: ModelApp  = {
     appName: "AI-TEAM",
     modelAccount: {ventor: VendorEnum.chatGpt, openAiApiKey: openAiApiKey} as ModelAccount,
     fireBaseAdmin: admin.initializeApp({credential: admin.credential.cert(fireBaseAdminKey as ServiceAccount)},"test"),
-    askModel() {
-        return new AskModels(this.fireBaseAdmin,this.modelAccount)
+    trainModel(skipModel: boolean) {
+        return new TrainModels(this.fireBaseAdmin,this.modelAccount,skipModel)
     }
 }
 export default modelApp

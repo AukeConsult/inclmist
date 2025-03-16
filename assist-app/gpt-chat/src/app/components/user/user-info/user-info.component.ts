@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
-import { AppUser } from 'shared-library/src';
-import {CommonModule} from '@angular/common';
+import { AppUser } from 'shared-library';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone:true,

@@ -15,13 +15,13 @@ describe('test simple chat', () => {
 
     it('open simple chat',  async () => {
 
-        const model = app.askModel();
+        const model = app.trainModel(true);
         const chatStorage = model.storeage
 
         const retMessage = await model.askQuestion({
-            userId: userId,
+            uid: userId,
             queryDescriptor: {
-                profileId: "leifprofile",
+                pid: "leifprofile",
                 queryParameters: [{
                     vendor: VendorEnum.chatGpt,
                     modelId: ModelEnum.gpt4,
@@ -44,13 +44,13 @@ describe('test simple chat', () => {
 
     it('make some messages', async () => {
 
-        const model = app.askModel();
+        const model = app.trainModel(true);
         const chatStorage = model.storeage
 
         var retMessage = await model.askQuestion({
-            userId: userId,
+            uid: userId,
             queryDescriptor: {
-                profileId: "leifprofile2",
+                pid: "leifprofile2",
                 queryParameters: [{
                     vendor: VendorEnum.chatGpt,
                     modelId: ModelEnum.gpt4,
@@ -72,7 +72,7 @@ describe('test simple chat', () => {
 
             expect(chatStorage.getDialog(retMessage)).toBeDefined()
 
-            const retObject = await chatStorage.readDialog({userId: retMessage.userId, dialogId: retMessage.dialogId})
+            const retObject = await chatStorage.readDialog({uid: retMessage.uid, did: retMessage.did})
             expect(retObject.chatDialog).toBeDefined()
             //expect(retObject.chatDialog?.entries.length).toBe(1)
 

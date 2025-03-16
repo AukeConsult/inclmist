@@ -19,13 +19,13 @@ export interface ChatEntry {
     // generated GUID to identify the message
     id?: string
     // ref to User
-    userId?: string
+    uid?: string
     //ref to current dialog, use when send messages
-    dialogId?: string
+    did?: string
     // ref to QuerySpecification, used
-    queryId?: string
+    qid?: string
     // ref to profile, used when dialog not exists
-    profileId?: string
+    pid?: string
 
     timeStamp: number
     // full QuerySpecification added to message while training
@@ -46,16 +46,16 @@ export interface ChatDialog {
     id?: string
 
     // the owner of the dialog
-    userId: string;
+    uid: string;
 
     // generated GUID to identify the dialog
     title: string,
 
     // reference to profile
-    profileId?: string
+    pid?: string
 
     // refenrence to QuerySpecification
-    queryId?: string
+    qid?: string
 
     // full QuerySpecification added to dialog while training
     queryDescriptor?: QueryDescriptor;

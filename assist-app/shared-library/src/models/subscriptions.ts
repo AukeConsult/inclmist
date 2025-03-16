@@ -1,15 +1,16 @@
 export interface QuerySubscription {
-    profileId: string
-    queryId: string
-    queryName: string
-    queryImage?: any
-    profileImage?: any
+    pid: string
+    qid: string
+    displayName: string
+    imageUrl?: string
+    image?: any
     dailyCost: number
 }
 
 export interface profileSubscription {
-    profileId: string
-    profileName: string
-    profileImage?: any
+    pid: string
+    displayName?: string
+    imageUrl?: string
+    image?: any
     dailyCost: number
 }

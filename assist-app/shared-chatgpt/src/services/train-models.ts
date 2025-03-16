@@ -10,13 +10,17 @@ import OpenAI from "openai";
 import {app} from "firebase-admin";
 import App = app.App;
 
-export class AskModels {
+export class TrainModels {
 
-    public simulate: boolean = true
     public storeage: ChatStorage
 
-    constructor(private fireBaseAdmin: App, public modelAccount: ModelAccount) {
+    constructor(private fireBaseAdmin: App,
+                public modelAccount: ModelAccount,
+                public skipModel: boolean) {
         this.storeage = new ChatStorage(this.fireBaseAdmin)
+    }
+    public async askQuestion(message: ChatEntry)  {
+        return this.processQuestion(message)
     }
 
     private async processQuestion(chatEntry: ChatEntry ) : Promise<any> {
@@ -35,8 +39,7 @@ export class AskModels {
                     chatDialog.history = newhistory
                 }
                 for (const parameter of queryDescriptor.queryParameters) {
-
-                    if(!this.simulate) {
+                    if(!this.skipModel) {
                         // read model
                         const results_query = await this.doChatCompletion(
                             chatDialog,
@@ -52,9 +55,6 @@ export class AskModels {
                 return {error: "NO-SPECIFICATION"} as ChatEntry
             }
         }
-    }
-    public async askQuestion(message: ChatEntry)  {
-        return this.processQuestion(message)
     }
 
     async doChatCompletion(
@@ -101,7 +101,7 @@ export class AskModels {
             {
                 model: parameters.modelId,
                 messages: [...chatMessages],
-                user: chatEntry.userId
+                user: chatEntry.uid
             })
 
         for(var r in ret.choices) {

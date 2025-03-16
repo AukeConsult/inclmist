@@ -11,10 +11,10 @@ export const createUser = async (name: string, email: string) => {
 export const updateUser = async (appUser: AppUser) => {
     const db = fbAdmin.firestore()
 
-    if(appUser.userId && (await db.collection("users").doc(appUser.userId).get()).exists)  {
+    if(appUser.uid && (await db.collection("users").doc(appUser.uid).get()).exists)  {
 
         const userRef =
-            db.collection("users").doc(appUser.userId);
+            db.collection("users").doc(appUser.uid);
 
         if(appUser.displayName || appUser.email) {
             await userRef.update({
@@ -23,25 +23,13 @@ export const updateUser = async (appUser: AppUser) => {
             });
         }
 
-        if(appUser.firebaseUser) {
-            await userRef.update({
-                firebaseUser: appUser.firebaseUser
-            });
-        }
-
-        if(appUser.userRecord) {
-            await userRef.update({
-                userRecord: appUser.userRecord
-            });
-        }
         return appUser;
 
     } else {
         const userRef =
             db.collection("users").doc();
-        appUser.userRecord = undefined
         await userRef.set(appUser);
-        appUser.userId=userRef.id
+        appUser.uid=userRef.id
         return appUser;
     }
 };

@@ -66,32 +66,45 @@ export interface ProfileAdminUsers {
     users: ProfileAdminUser []
 }
 
+// all operational data for profile
+export interface ProfileWork {
+
+    pid?: string
+
+    // string to make easy to see what it is when list
+    nameRef: string
+
+    // list of user subscriptions to profile
+    subscriptions?: ProfileSubscription
+
+    // settings for profile
+    profileSetting: ProfileSettings
+
+    // querySpecifications under work
+    workQueries?: ProfileQueries
+
+}
+
 //
 // basic profile information
 //
 export interface Profile {
 
+    pid?: string
     public?: boolean
-    profileName: string
+
+    displayName: string
     imageUrl: string
     ownerName?: string
 
     // reference to owner userid
-    ownerId: string
+    uid: string
     description?: string
 
-    // settings for profile
-    profileSetting: ProfileSettings
-
-    // list of user subsriptions to profile
-    subscriptions?: ProfileSubscription
-
-    // querySpcifications under work
-    workQueries?: ProfileQueries
-
     // querySpcifications publiched
-    publicedQueries?: ProfileQueries
+    publishedQueries?: ProfileQueries
 
     // list of users that can admin the profile
     adminUsers: ProfileAdminUsers
+
 }

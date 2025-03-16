@@ -72,7 +72,7 @@ export interface QueryDescriptor {
     id?: string,
 
     // reference to profile owning the qquery
-    profileId: string
+    pid: string
 
     // description of the query
     description: string

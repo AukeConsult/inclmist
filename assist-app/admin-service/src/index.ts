@@ -1,4 +1,4 @@
-import { syncUserOnCreate, deleteUserOnRemove } from "./triggers/authSync";
+import { deleteUserOnRemove } from "./triggers/authSync";
 import * as fbAdmin from "firebase-admin";
 import {onCall} from "firebase-functions/v2/https";
 import {getUserByEmail, getUserByUID, listUsers} from "./services/auth.service";
@@ -6,7 +6,6 @@ import {createUser, fetchUsers, updateUser} from "./services/users.service";
 
 fbAdmin.initializeApp();
 
-exports.syncUserOnCreate = syncUserOnCreate;
 exports.deleteUserOnRemove = deleteUserOnRemove;
 
 exports.createUser = onCall(async (request) => {
