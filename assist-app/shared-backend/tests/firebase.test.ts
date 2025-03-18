@@ -1,9 +1,6 @@
-
-import * as admin from "firebase-admin"
-import {fireBaseAdminKey} from "../src/secrets";
-import {ServiceAccount} from "firebase-admin/lib/app/credential";
-
-admin.initializeApp({credential: admin.credential.cert(fireBaseAdminKey as ServiceAccount)})
+import * as admin from "firebase-admin";
+import {appConfig} from "../src";
+admin.initializeApp({credential: admin.credential.cert(appConfig.fireBaseServiceAccountKey)})
 
 describe('logon firebase', () => {
 

@@ -2,9 +2,8 @@ import {Component, EventEmitter, NgZone, OnInit, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { User } from '@angular/fire/auth';
 import {Observable, Subscription} from 'rxjs';
-import { AppUser } from 'shared-library/src';
+import { AppUser } from 'shared-library';
 
 
 @Component({

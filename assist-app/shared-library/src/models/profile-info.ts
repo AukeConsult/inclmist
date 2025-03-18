@@ -1,9 +1,10 @@
 import {QueryDescriptor} from "./query-descriptor";
-import {VendorEnum} from "./enum-types";
+import {ModelEnum, ProfileUserType, VendorEnum} from "./enum-types";
+import {ChatDialog} from "./chat-dialog";
 
 export interface ProfileAdminUser {
-    userId: string
-    role: string
+    uid: string
+    role: ProfileUserType
     name: string
 }
 
@@ -57,7 +58,9 @@ export interface ProfileSubscription {
 }
 
 export interface ProfileSettings {
-    models: { modelVendor: VendorEnum, modelId: string, apyKey: string } []
+    models: { modelVendor: VendorEnum | string, modelId: ModelEnum | string, modelApiKey: string } []
+    colorBack?: string
+    colorFrame?: string
 }
 
 // contain everything regarding Admin users
@@ -69,6 +72,7 @@ export interface ProfileAdminUsers {
 // all operational data for profile
 export interface ProfileWork {
 
+    uid: string
     pid?: string
 
     // string to make easy to see what it is when list
@@ -78,33 +82,32 @@ export interface ProfileWork {
     subscriptions?: ProfileSubscription
 
     // settings for profile
-    profileSetting: ProfileSettings
+    profileSetting?: ProfileSettings
 
     // querySpecifications under work
-    workQueries?: ProfileQueries
+    workQueries?: QueryDescriptor []
 
+    // dialogs from tuning queries
+    workDialogs?: ChatDialog []
+
+    // querySpecifications publiched
+    publishedQueries?: QueryDescriptor[]
+
+    // list of users that can admin the profile
+    adminUsers: ProfileAdminUser []
 }
 
 //
 // basic profile information
 //
 export interface Profile {
-
     pid?: string
-    public?: boolean
-
-    displayName: string
-    imageUrl: string
-    ownerName?: string
-
-    // reference to owner userid
-    uid: string
+    public: boolean
+    displayName?: string
     description?: string
-
-    // querySpcifications publiched
-    publishedQueries?: ProfileQueries
-
-    // list of users that can admin the profile
-    adminUsers: ProfileAdminUsers
-
+    logo?: object
+    imageUrl?: string
+    longText: string
+    homeUrl?: string
+    helpUrl?: string
 }

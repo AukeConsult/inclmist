@@ -40,7 +40,7 @@ export interface QueryParameters {
     vendor: VendorEnum
 
     // the id of the model to use
-    modelId: ModelEnum;
+    modelId: ModelEnum | string | undefined;
 
     // instructions to the model
     // send to model on every query to instuct the model how to answer

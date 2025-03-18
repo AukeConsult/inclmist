@@ -5,12 +5,13 @@ import {ModelEnum, MsgTypeEnum} from "./enum-types";
 
 // message sent to and from a model
 export interface ChatMessage {
-    modelId: ModelEnum;
+    modelId?: ModelEnum | string;
     role?: MsgTypeEnum | string,
     content?: string,
     image?: object
     file?: object
     modelResult?: any
+    error?: any
 }
 
 // message entry in dialog
@@ -27,7 +28,7 @@ export interface ChatEntry {
     // ref to profile, used when dialog not exists
     pid?: string
 
-    timeStamp: number
+    timeStamp?: number
     // full QuerySpecification added to message while training
     // use to store shanged in QuerySpecification
     queryDescriptor?: QueryDescriptor;
@@ -35,7 +36,8 @@ export interface ChatEntry {
     entry?: ChatMessage []
     // answers from model
     replies?: ChatMessage []
-
+    // contect for next question
+    history?: ChatMessage []
     // last errors
     error?: string
     errorObject?: any

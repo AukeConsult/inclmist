@@ -1,5 +1,5 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import { ChatgptService } from '../../services/chatgpt.service';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { ChatService } from '../../services/chat.service';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
@@ -10,12 +10,16 @@ import {FormsModule} from '@angular/forms';
     standalone: true,
     imports: [CommonModule, FormsModule]
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   userMessage = '';
   chatHistory: { role: string, content: string, type: string }[] = [];
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
-  constructor(private chatService: ChatgptService) {}
+  constructor(private chatService: ChatService) {}
+
+  ngOnInit() {
+    this.chatService.initChat()
+  }
 
   ngAfterViewChecked() {
     this.scrollToBottom();
@@ -29,17 +33,22 @@ export class ChatComponent {
 
   sendMessage() {
     this.chatHistory.push({ role: 'user', content: this.userMessage, type: 'text' });
-    this.chatService.sendMessage(this.userMessage).subscribe((response: { choices: { message: { content: any } }[] }) => {
-      // @ts-ignore
-      const botReply = response.choices[0].message.content;
-      this.chatHistory.push({ role: 'bot', content: botReply, type: 'text' });
-    });
+
+    this.chatService.sendMessageModel(this.userMessage).then((res)=> {
+      for (var r of res.replies) {
+        this.chatHistory.push({ role: r.role, content: r.content, type: 'text' });
+      }
+    }).catch((err)=> {
+      if(err instanceof Error) {
+        this.chatHistory.push({ role: 'error', content: err.message, type: 'text' });
+      }
+    })
     this.userMessage=''
     this.scrollToBottom();
 
   }
-
   paragraphs(content: string ): string[] {
     return content.split("\n", undefined)
   }
+
 }

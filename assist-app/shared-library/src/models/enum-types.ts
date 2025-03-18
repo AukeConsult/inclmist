@@ -1,3 +1,9 @@
+export enum ProfileUserType {
+    admin = 'admin',
+    userUpdate = 'userUpdate',
+    user = 'user',
+}
+
 export enum VendorEnum {
     chatGpt = 'chatGpt'
 }

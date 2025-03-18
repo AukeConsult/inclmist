@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "declaration": true,
+    "outDir": "lib",
+    "strict": true,
+    "paths": {
+      "shared-library": ["./node_modules/shared-library"],
+    }
+  },
+  "include": ["src"]
+}
