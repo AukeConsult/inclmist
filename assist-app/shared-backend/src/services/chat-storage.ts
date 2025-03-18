@@ -82,7 +82,7 @@ export class ChatStorage {
                     canUpdate: true,
                     users:
                         [
-                            {userId: chatEntry.uid, role: "admin", name: "no name"}
+                            {uid: chatEntry.uid, role: "admin", name: "no name"}
                         ] as ProfileAdminUser[]
                     } as ProfileAdminUsers
                 }

@@ -5,7 +5,13 @@
     "declaration": true,
     "outDir": "lib",
     "strict": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "baseUrl": "./",
+    "paths": {
+      "shared-backend": ["./node_modules/shared-backend"],
+      "shared-frontend": ["./node_modules/shared-frontend"],
+      "shared-library": ["./node_modules/shared-library"],
+    }
   },
   "compileOnSave": true,
   "include": [

@@ -1,5 +1,5 @@
 import { credential, initializeApp } from "firebase-admin"
-import { fireBaseAdminKey } from "../src/secrets";
+import { fireBaseAdminKey } from "shared-backend/secrets";
 import { ServiceAccount } from "firebase-admin/lib/app/credential";
 
 import * as admin from "firebase-admin";

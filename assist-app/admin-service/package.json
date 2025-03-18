@@ -23,6 +23,8 @@
     "firebase-admin": "^12.7.0",
     "firebase-tools": "^13.32.0",
     "firebase-functions": "^6.3.2",
+    "shared-frontend": "file:../shared-frontend",
+    "shared-backend": "file:../shared-backend",
     "shared-library": "file:../shared-library"
   },
   "devDependencies": {
