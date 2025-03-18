@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import backendApp from "../../../../shared-backend/src/index"
+import backendApp from "shared-backend/src/index"
 
 @Injectable({
   providedIn: 'root'
