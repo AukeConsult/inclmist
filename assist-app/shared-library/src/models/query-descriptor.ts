@@ -26,11 +26,10 @@ export interface LinkRefs {
 
 // ref to databases
 export interface DbRefs {
-    url: string
-    logonUserId: string
-    logonPassword: string
-    dataTable: string
-    parameters: string
+    resultId: string
+    dbUrl: string
+    sqlQuery: String
+    parameters: string []
 }
 
 // query model parameters
@@ -38,6 +37,7 @@ export interface QueryParameters {
 
     // the vendor (chatgpt)
     vendor: VendorEnum
+    vendorKey: string
 
     // the id of the model to use
     modelId: ModelEnum | string | undefined;
@@ -74,23 +74,28 @@ export interface QueryDescriptor {
     // reference to profile owning the qquery
     pid: string
 
+    // reference to user own the query
+    uid: string
+
+    // name ref for the owner
+    uname?: string
+
     // description of the query
-    description: string
+    description?: string
 
     // keyWords (space separated) used for searching the Query in frontend
     keyWords: string
 
     // some image and or logo for the query
-    imageUrl: string
-    image: object
+    imageUrl?: string
+    image?: object
 
-    added: Date
-    lastused: Date
+    createdAt?: Date
+    lastUsedAt?: Date
 
     // parameters for query
     // can be more than one, i.e on question look opp multiple models,
     // for first version only one
     queryParameters: QueryParameters []
-
 
 }
