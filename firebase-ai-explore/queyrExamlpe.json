@@ -1,0 +1,42 @@
+{
+    "id": "",
+	"qid": "query1",
+    "pid": "profile1",
+    "uid": "as212AAS",
+    "uname": "leif",
+    "description": "this is a test query with db links",
+    "keyWords": [
+		"database",
+		"test",
+		"jobs"
+	],
+	"queryParameters": [
+		 {
+			"vendor": "gemini",
+			"vendorKey": ",<GEMINI_API_KEY>",
+			"modelId": "gemini-1.5-pro",
+			"max_tokens": 2000,
+			"temperature": 0.5,
+			"instructions": [
+				{"message": "Show me a good report from ${QUERY1RESULT}"},
+				{"message": "then make a tabular format"}
+			],
+			"dbRefs": [
+				{
+					"dbid": "db1",
+					"result": "QUERY1RESULT",
+					"dbUrl": "postgresql://user:password@host:port/dbname",
+					"dbKey": "",
+					"sqlQuery": "SELECT title, company, location, description FROM jobs WHERE title ILIKE '%{query}%' LIMIT 5;",
+					"sqlJoin": "{title} at {company}, {location} {description[:100]}...\" for title, company, location, description in jobs",
+					"parameters": [
+						{"query":"some query string"},
+						{"par1":"asdasd"}
+					]
+				}
+			]
+		}
+	]
+}
+
+
