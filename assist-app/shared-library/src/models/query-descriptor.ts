@@ -37,7 +37,7 @@ export interface QueryParameters {
 
     // the vendor (chatgpt)
     vendor: VendorEnum
-    vendorKey: string
+    vendorKey?: string
 
     // the id of the model to use
     modelId: ModelEnum | string | undefined;
@@ -72,10 +72,10 @@ export interface QueryDescriptor {
     id?: string,
 
     // reference to profile owning the qquery
-    pid: string
+    pid?: string
 
     // reference to user own the query
-    uid: string
+    uid?: string
 
     // name ref for the owner
     uname?: string
@@ -84,7 +84,7 @@ export interface QueryDescriptor {
     description?: string
 
     // keyWords (space separated) used for searching the Query in frontend
-    keyWords: string
+    keyWords?: string
 
     // some image and or logo for the query
     imageUrl?: string

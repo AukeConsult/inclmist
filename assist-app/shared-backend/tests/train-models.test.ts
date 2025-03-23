@@ -18,7 +18,7 @@ describe('test simple chat without modelel intracation', () => {
         const model = backendApp.trainModels(app,true);
         const chatStorage = model.storeage
 
-        const retMessage = await model.sendEntry({
+        const entry = {
             uid: "leif2",
             pid: "leifprofile",
             queryDescriptor: {
@@ -31,7 +31,10 @@ describe('test simple chat without modelel intracation', () => {
             entry: [{
                 content: "hello"
             }] as ChatMessage []
-        } as ChatEntry)
+        } as ChatEntry
+
+
+        const retMessage = await model.sendEntry(entry)
         expect(retMessage).toBeDefined()
         if (retMessage) {
             expect(retMessage.replies).toBeDefined()
