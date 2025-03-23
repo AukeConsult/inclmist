@@ -1,8 +1,7 @@
 {
-    "id": "",
-	"qid": "query1",
+	"id": "query1",
     "pid": "profile1",
-    "uid": "as212AAS",
+    "uid": "as212AASleif",
     "uname": "leif",
     "description": "this is a test query with db links",
     "keyWords": [
