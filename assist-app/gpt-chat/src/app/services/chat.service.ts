@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import backendApp from "shared-backend/src/index"
+import backendApp from "shared-backend/lib/src/index"
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class ChatService {
     if(!this.lastEntry) {
       this.lastEntry = []
     }
-
+    console.log("hello")
     this.lastEntry.entry = [
       {role: "user", content: message}
     ]

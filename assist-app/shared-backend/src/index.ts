@@ -32,15 +32,12 @@ export interface BackendApp {
 }
 
 const backendApp: BackendApp  = {
-
     appName: "AI-TEAM",
     modelAccount: {ventor: VendorEnum.chatGpt, openAiApiKey: appConfig.openAiApiKey} as ModelAccount,
     queryModels: new QueryModels(),
     trainModels(fireBaseAdmin,skipModel: boolean) {
         return new TrainModels(fireBaseAdmin,this.modelAccount,skipModel)
     },
-
-
 }
 
 export default backendApp

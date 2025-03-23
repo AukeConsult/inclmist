@@ -5,9 +5,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "shared-backend": ["./node_modules/shared-backend"],
-      "shared-frontend": ["./node_modules/shared-frontend"],
-      "shared-library": ["./node_modules/shared-library"],
+      "shared-backend": ["node_modules/shared-backend"],
+      "shared-frontend": ["node_modules/shared-frontend"],
+      "shared-library": ["node_modules/shared-library"],
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -36,5 +36,9 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "../shared-backend/src/index.ts",
+    "src/**/*.ts",
+  ]
 }
