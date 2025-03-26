@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ChatEntry} from 'shared-library';
+import {HttpClient} from '@angular/common/http';
+import {AuthService} from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,30 +10,36 @@ export class ChatService {
 
   private lastEntry = undefined
 
-  constructor() {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   initChat() {
     this.lastEntry=undefined
   }
 
-  sendSimpleMessageModel(message: string) {
-    // const model = backendApp.queryModels()
-    // return model.simpleMessage(message)
-    //return new Promise<ChatEntry>(()=> {} )
-  }
-
   sendMessageModel(message: string) {
 
-    if(!this.lastEntry) {
+    if (!this.lastEntry) {
       this.lastEntry = []
     }
-    console.log("hello")
+    this.lastEntry.uid = this.authService.getUid()
     this.lastEntry.entry = [
       {role: "user", content: message}
     ]
-    //const model = backendApp.queryModels()
-    //return model.chatMessage(this.lastEntry)
-    return new Promise<ChatEntry>(()=> {} )
+    return fetch("http://localhost:5000/entry", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({...this.lastEntry})
+    }).then((resp)=>  resp.json())
+      .then((val)=> {
+        this.lastEntry = val as ChatEntry
+        return this.lastEntry
+      }).catch((err)=> {
+        console.log(err)
+        return this.lastEntry
+      })
   }
 
   // generateImage(prompt: string): Observable<any> {

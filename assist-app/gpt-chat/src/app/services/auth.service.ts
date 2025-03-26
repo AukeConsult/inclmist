@@ -10,7 +10,7 @@ import {
   User,
   RecaptchaVerifier,
   GoogleAuthProvider,
-  sendEmailVerification, updateProfile, updatePassword, updateEmail, onAuthStateChanged
+  sendEmailVerification, updateProfile, updatePassword, updateEmail
 } from '@angular/fire/auth';
 import { AppUser } from 'shared-library';
 
@@ -81,6 +81,9 @@ export class AuthService {
     }
   }
 
+  getUid() {
+    return this.userSubject.value.uid
+  }
 
   async verifyEmail(user: User) {
     try {
