@@ -1,6 +1,6 @@
 import {VendorEnum} from "./enum-types";
 
 export interface ModelAccount {
-    ventor: VendorEnum
+    vendor: VendorEnum | string
     openAiApiKey: string
 }

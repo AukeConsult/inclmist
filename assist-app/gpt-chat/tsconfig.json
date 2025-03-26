@@ -5,7 +5,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "shared-backend": ["node_modules/shared-backend"],
       "shared-frontend": ["node_modules/shared-frontend"],
       "shared-library": ["node_modules/shared-library"],
     },
@@ -38,7 +37,7 @@
     "strictTemplates": true
   },
   "include": [
-    "../shared-backend/src/index.ts",
-    "src/**/*.ts",
+    "../shared-backend/src/config.ts",
+    "src/**/*.ts"
   ]
 }

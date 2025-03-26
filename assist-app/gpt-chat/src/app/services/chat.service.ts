@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import backendApp from "shared-backend/lib/src/index"
+import {ChatEntry} from 'shared-library';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,9 @@ export class ChatService {
   }
 
   sendSimpleMessageModel(message: string) {
-    const model = backendApp.queryModels
-    return model.simpleMessage(message)
+    // const model = backendApp.queryModels()
+    // return model.simpleMessage(message)
+    //return new Promise<ChatEntry>(()=> {} )
   }
 
   sendMessageModel(message: string) {
@@ -28,9 +29,9 @@ export class ChatService {
     this.lastEntry.entry = [
       {role: "user", content: message}
     ]
-    const model = backendApp.queryModels
-    return model.chatMessage(this.lastEntry)
-
+    //const model = backendApp.queryModels()
+    //return model.chatMessage(this.lastEntry)
+    return new Promise<ChatEntry>(()=> {} )
   }
 
   // generateImage(prompt: string): Observable<any> {

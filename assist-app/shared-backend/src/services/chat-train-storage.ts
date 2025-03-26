@@ -3,7 +3,7 @@ import {
     QueryDescriptor,
     ProfileWork
 } from "shared-library";
-import {app, firestore} from "firebase-admin";
+import {firestore} from "firebase-admin";
 
 const collnames = {
     userWork: "usersWork",
@@ -18,14 +18,12 @@ const collnames = {
 
 export class ChatTrainStorage {
 
-    private db: firestore.Firestore
     private userCollection
     private profilesCollection
 
-    constructor(firebaseApp: app.App) {
-        this.db = firebaseApp.firestore()
-        this.userCollection = this.db.collection(collnames.userWork)
-        this.profilesCollection = this.db.collection(collnames.profilesWork)
+    constructor(db: firestore.Firestore) {
+        this.userCollection = db.collection(collnames.userWork)
+        this.profilesCollection = db.collection(collnames.profilesWork)
     }
 
     public async storeChatEntry(chatEntry: ChatEntry, results: ChatMessage[]) {

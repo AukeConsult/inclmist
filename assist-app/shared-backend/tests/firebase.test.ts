@@ -1,11 +1,12 @@
-import * as admin from "firebase-admin";
-import {appConfig} from "../src";
-admin.initializeApp({credential: admin.credential.cert(appConfig.fireBaseServiceAccountKey)})
+import {appConfig} from "../src/config";
+import {firestore} from "firebase-admin";
+import * as firebase from "firebase-admin"
+firebase.initializeApp({credential: firebase.credential.cert(appConfig.fireBaseServiceAccountKey)});
 
 describe('logon firebase', () => {
 
     it('connect to firebase', async () => {
-        const db = admin.firestore()
+        const db = firestore()
         await db.listCollections()
         const docRef = db.collection("test").doc()
         await docRef.set({})
@@ -14,9 +15,7 @@ describe('logon firebase', () => {
     })
 
     it('partial update firebase', async () => {
-        const db = admin.firestore()
-        const x = await db.listCollections()
-
+        const db = firestore()
         const docRef = db.collection("test").doc("partial4")
         const doc = await docRef.get()
         if(doc.exists) {
@@ -38,9 +37,7 @@ describe('logon firebase', () => {
 
     it('update sub collections', async () => {
 
-        const db = admin.firestore()
-        const x = await db.listCollections()
-
+        const db = firestore()
         const docRef = db.collection("test").doc("partial5")
         const doc = await docRef.get()
         if (doc.exists) {

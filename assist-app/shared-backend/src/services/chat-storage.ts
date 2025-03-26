@@ -1,107 +1,58 @@
-import {ChatDialog, ChatEntry, ChatMessage} from "shared-library/src/models/chat-dialog";
+import {ChatDialog, ChatEntry} from "shared-library/src/models/chat-dialog";
 import {
-    AppUser,
     QueryDescriptor,
-    ReturnObj,
-    ProfileAdminUser,
-    ProfileAdminUsers, AppUserWork
+    AppUserWork
 } from "shared-library";
-import {app, firestore} from "firebase-admin";
+import {firestore} from "firebase-admin";
 
 export class ChatStorage {
 
-    private db: firestore.Firestore
     private userCollection
-    private profilesCollection
 
-    constructor(firebaseApp: app.App) {
-        this.db = firebaseApp.firestore()
-        this.userCollection = this.db.collection("users-work")
-        this.profilesCollection = this.db.collection("profiles-work")
+    constructor(db: firestore.Firestore) {
+        this.userCollection = db.collection("users-work")
     }
 
-    public async storeChatEntry(chatEntry: ChatEntry, results: ChatMessage[]) {
+    public async storeChatEntry(chatEntry: ChatEntry) {
 
-        if(await this.initEntry(chatEntry)) {
+        if(chatEntry.uid && chatEntry.did) {
 
-            if(chatEntry.uid && chatEntry.did && chatEntry.pid) {
+            chatEntry.timeStamp = Date.now()
+            const dialogRef
+                = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc(chatEntry.did)
 
-                chatEntry.timeStamp = Date.now()
-                chatEntry.replies = results
-                const dialogRef
-                    = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc(chatEntry.did)
-
-                const entryRef = dialogRef.collection("entries").doc()
-                await entryRef.set(chatEntry)
-                dialogRef.update({
-                    queryId: chatEntry.qid,
-                    queryDescriptor: chatEntry.queryDescriptor
-                })
-
-            } else {
-                chatEntry.error = "NO-DIALOG"
+            const entryRef = dialogRef.collection("entries").doc()
+            await entryRef.set(chatEntry)
+            if(chatEntry.qid) {
+                dialogRef.update ({qid: chatEntry.qid})
             }
+
         } else {
-            chatEntry.error = "NO-PROFILE"
+            chatEntry.error = "NO-DIALOG"
         }
         return chatEntry
 
     }
     async initEntry(chatEntry: ChatEntry)  {
 
-        if (!chatEntry.uid) {
-            const doc = this.userCollection.doc()
-            await doc.set(
+        var userRef = this.userCollection.doc()
+        if(chatEntry.uid) {
+            userRef = this.userCollection.doc(chatEntry.uid)
+        }
+
+        if (!chatEntry.uid || !(await userRef.get()).exists) {
+            await userRef.set(
                 {
-                    role: 'profileOwner',
-                    nameRef: "dummy"
-                } as unknown as AppUserWork
+                    role: 'user'
+                } as AppUserWork
             )
-            chatEntry.uid = doc.id
-            await this.userCollection.doc(doc.id).update({userId: doc.id})
-        }
-        if(!(await this.userCollection.doc(chatEntry.uid).get()).exists) {
-            this.userCollection.doc(chatEntry.uid).set({active: false, userName: "dummy user"})
+            chatEntry.uid = userRef.id
+            await this.userCollection.doc(userRef.id).update({uid: userRef.id})
         }
 
-        var profileRef = this.profilesCollection.doc()
-        if(chatEntry.pid) {
-            profileRef = this.profilesCollection.doc(chatEntry.pid)
-        }
+        if(chatEntry.queryDescriptor) {
 
-        if (!chatEntry.pid || !(await profileRef.get()).exists) {
-
-            const profile = {
-                public: false,
-                profileName: chatEntry.uid,
-                ownerName: chatEntry.uid,
-                uid: chatEntry.uid,
-                pictures: [],
-                links: [],
-                adminUsers: {
-                    canUpdate: true,
-                    users:
-                        [
-                            {uid: chatEntry.uid, role: "admin", name: "no name"}
-                        ] as ProfileAdminUser[]
-                    } as ProfileAdminUsers
-                }
-
-            await profileRef.set(profile)
-            chatEntry.pid = profileRef.id
-            await this.userCollection.doc(chatEntry.uid).collection("profileRefs")
-                .doc(chatEntry.pid).set({
-                    pid: chatEntry.pid,
-                    name: profile.profileName
-                })
-
-        }
-
-        if(chatEntry.queryDescriptor && chatEntry.pid) {
-
-            const profileRef = this.profilesCollection.doc(chatEntry.pid)
-            const queryCollection = profileRef.collection("trainQueries")
-
+            const queryCollection = this.userCollection.doc(chatEntry.uid).collection("queries")
             if(!chatEntry.qid) {
                 const queryRef = queryCollection.doc()
                 await queryRef.set(chatEntry.queryDescriptor)
@@ -110,31 +61,29 @@ export class ChatStorage {
                 const queryRef = queryCollection.doc(chatEntry.qid)
                 await queryRef.set(chatEntry.queryDescriptor)
             }
-
         }
 
-        if (!chatEntry.did && chatEntry.entry) {
+        if(chatEntry.entry) {
 
-            const title = chatEntry.entry[0].content
-            const dialog = {
-                uid: chatEntry.uid,
-                title: title,
-                qid: chatEntry.qid,
-                pid: chatEntry.pid
-            } as ChatDialog
+            var dialogRef = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc()
+            if(chatEntry.did) {
+                dialogRef = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc(chatEntry.did)
+            }
+            if (!chatEntry.did || !(await dialogRef.get()).exists) {
+                const title = chatEntry.entry[0].content
+                const dialog = {
+                    uid: chatEntry.uid,
+                    title: title,
+                } as ChatDialog
 
-            const dialogRef
-                = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc()
-            await dialogRef.set(dialog)
-            chatEntry.did = dialogRef.id
-
+                const dialogRef
+                    = this.userCollection.doc(chatEntry.uid).collection("dialogs").doc()
+                await dialogRef.set(dialog)
+                chatEntry.did = dialogRef.id
+            }
         }
+        return chatEntry
 
-        if (chatEntry.did) {
-            return (await this.userCollection.doc(chatEntry.uid).collection("dialogs").doc(chatEntry.did).get()).exists
-        } else {
-            return false
-        }
     }
 
     async getDialog(chatEntry: ChatEntry) {
@@ -147,14 +96,14 @@ export class ChatStorage {
     }
 
     async getQueryDecription(chatEntry: ChatEntry) : Promise<QueryDescriptor | undefined>  {
-        if(chatEntry.pid && chatEntry.qid) {
-            return {...(await this.profilesCollection.doc(chatEntry.pid).collection("queries").doc(chatEntry.qid).get()).data()} as QueryDescriptor
+        if(chatEntry.uid && chatEntry.qid) {
+            return {...(await this.userCollection.doc(chatEntry.uid).collection("queries").doc(chatEntry.qid).get()).data()} as QueryDescriptor
         } else {
             return undefined
         }
     }
 
-    public async readDialog(dialogRef: {uid: string, did: string}) : Promise<ReturnObj> {
+    public async readDialog(dialogRef: {uid: string, did: string}) : Promise<ChatDialog> {
         const dialogs = this.userCollection.doc(dialogRef.uid).collection("dialogs")
         return dialogs.doc(dialogRef.uid).get()
             .then(async (r)=> {
@@ -163,12 +112,7 @@ export class ChatStorage {
                 snap.forEach((c)=> {
                     dialog.entries.push(c.data() as ChatEntry)
                 })
-                const ret = {
-                    chatDialog: dialog
-                } as ReturnObj
-                return ret
-            }).catch((error)=> {
-            return {error: "NO-DIALOG", errorObj: error} as ReturnObj
+                return dialog
             })
     }
 }

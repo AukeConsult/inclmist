@@ -1,8 +1,10 @@
 import {ChatMessage} from "shared-library";
 import OpenAI from "openai";
-import {appConfig} from "../index";
 import {ChatEntry} from "shared-library"
-
+import {firestore} from "firebase-admin";
+import {appConfig} from "../config";
+import Firestore = firestore.Firestore;
+import {ChatStorage} from "../services/chat-storage";
 
 export class QueryModels {
 
@@ -11,42 +13,46 @@ export class QueryModels {
         dangerouslyAllowBrowser: true
     });
 
-    constructor() {}
+    public storage: ChatStorage
+
+    constructor(fireStore: Firestore) {
+        this.storage = new ChatStorage(fireStore)
+    }
 
     async chatMessage(chatEntry: ChatEntry)  {
 
-        // add history for context
-        const messages: string | any[] = []
+        return this.storage.initEntry(chatEntry).then((entry)=> {
 
-        if(chatEntry.history) {
-            // remove oldest history
-            if(chatEntry.history.length>3) {
-                chatEntry.history = chatEntry.history.slice(1)
-            }
-            for(var hm of chatEntry.history) {
-                console.log(hm)
-                messages.push({
-                    role: hm.role,
-                    content: hm.content
-                })
-            }
-        }
-        if(chatEntry.entry) {
-            for(var m of chatEntry.entry) {
-                messages.push({
-                    role: m.role,
-                    content: m.content
-                })
-            }
-        }
+            // add history for context
+            const messages: string | any[] = []
 
-        if(messages.length === 0) return chatEntry
+            if(entry.history) {
+                // remove oldest history
+                if(entry.history.length>3) {
+                    entry.history = entry.history.slice(1)
+                }
+                for(var hm of entry.history) {
+                    messages.push({
+                        role: hm.role,
+                        content: hm.content
+                    })
+                }
+            }
+            if(entry.entry) {
+                for(var m of entry.entry) {
+                    messages.push({
+                        role: m.role,
+                        content: m.content
+                    })
+                }
+            }
 
-        return this.client.chat.completions.create(
-            {
-                model: 'gpt-4',
-                messages: messages,
-            }).then((ret)=> {
+            return this.client.chat.completions.create(
+                {
+                    model: 'gpt-4',
+                    messages: messages,
+
+                }).then((ret)=> {
 
                 const result: ChatMessage[] = []
                 for(var r of ret.choices) {
@@ -56,24 +62,17 @@ export class QueryModels {
                         content: r.message.content
                     } as ChatMessage)
                 }
-                chatEntry.replies=result
-                if(!chatEntry.history) {
-                    chatEntry.history = []
+                entry.replies=result
+                if(!entry.history) {
+                    entry.history = []
                 }
-                chatEntry.history.push(...result)
-                return chatEntry
-
-            }).catch((err)=> {
-                console.log(err)
-                return {
-                    error: "CHAT_ERROR",
-                    errorObject: err
-                } as ChatEntry
+                entry.history.push(...result)
+                return this.storage.storeChatEntry(entry).then((ret)=> ret)
             })
+        })
     }
 
     async simpleMessage(message: string)  {
-
         const chatMessages: any | undefined [] = [
             {
                 role: 'user',

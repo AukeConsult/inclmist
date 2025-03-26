@@ -1,6 +1,7 @@
-import {Profile, ProfileSubscription} from "./profile-info";
+import {ProfileSubscription} from "./profile-info";
 import {QuerySubscription} from "./subscriptions";
 import {ChatDialog} from "./chat-dialog";
+import {QueryDescriptor} from "./query-descriptor";
 
 export interface AppUserWork {
 
@@ -11,7 +12,7 @@ export interface AppUserWork {
     nameRef: string
 
     // list of own profiles
-    profiles?: Profile[]
+    profiles?: {pid: string, active: boolean}[]
 
     // list of profiles subscription
     profileSubscriptions?: ProfileSubscription []
@@ -21,6 +22,10 @@ export interface AppUserWork {
 
     // dialog history
     dialogs?: ChatDialog []
+
+    // dialog history
+    queries?: QueryDescriptor []
+
 
 }
 

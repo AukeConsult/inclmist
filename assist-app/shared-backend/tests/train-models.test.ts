@@ -1,21 +1,27 @@
+import {appConfig} from "../src/config";
 import {
     ChatEntry,
-    ChatMessage,
+    ChatMessage, ModelAccount,
     ModelEnum,
     VendorEnum
 } from "shared-library";
+import {TrainModels} from "../src/services/train-models";
+import * as firebase from "firebase-admin"
+firebase.initializeApp({credential: firebase.credential.cert(appConfig.fireBaseServiceAccountKey)});
 
-import * as admin from "firebase-admin";
-import backendApp, {appConfig} from "../src";
 
-const app = admin.initializeApp({credential: admin.credential.cert(appConfig.fireBaseServiceAccountKey)})
+const modelAccount = {
+    vendor: "chatgpt",
+    openAiApiKey: appConfig.openAiApiKey
+} as ModelAccount
+
+const model = new TrainModels(firebase.firestore(),modelAccount,false)
 const userId = "leif"
 
 describe('test simple chat without modelel intracation', () => {
 
     it('open simple chat',  async () => {
 
-        const model = backendApp.trainModels(app,true);
         const chatStorage = model.storeage
 
         const entry = {
@@ -49,7 +55,6 @@ describe('test simple chat without modelel intracation', () => {
 
     it('open simple chat empty userid',  async () => {
 
-        const model = backendApp.trainModels(app,true);
         const chatStorage = model.storeage
 
         const retMessage = await model.sendEntry({
@@ -72,7 +77,7 @@ describe('test simple chat without modelel intracation', () => {
             console.log("no message")
         }
 
-        const db = admin.firestore()
+        const db = firebase.firestore()
         const userRef = db.collection("usersWork").doc(retMessage.uid)
         const user = await userRef.get()
         expect(user).toBeDefined()
@@ -92,9 +97,7 @@ describe('test simple chat without modelel intracation', () => {
 
     it('open simple chat empty profile',  async () => {
 
-        const model = backendApp.trainModels(app,true);
         const chatStorage = model.storeage
-
         const retMessage = await model.sendEntry({
             uid: userId,
             queryDescriptor: {
@@ -117,13 +120,10 @@ describe('test simple chat without modelel intracation', () => {
             console.log("no message")
         }
 
-
-
     },1000*300);
 
     it('make some messages', async () => {
 
-        const model = backendApp.trainModels(app,true);
         const chatStorage = model.storeage
 
         var retMessage = await model.sendEntry({
@@ -166,12 +166,11 @@ describe('test simple chat without modelel intracation', () => {
                     const retDialog = await chatStorage.readDialog({pid: retMessage.pid, did: retMessage.did})
                     //console.log("dialog", retDialog)
                     expect(retDialog?.entries.length).toBe(i+1)
-                    console.log("result", retMessage)
                 }
             }
         }
 
-        const db = admin.firestore()
+        const db = firebase.firestore()
         const docRef = db.collection("usersWork/leif/trainProfiles/").where("pid","==","leifprofile2").select("pid", "name")
         const profiles = await docRef.get()
         expect(profiles).toBeDefined()
@@ -180,7 +179,6 @@ describe('test simple chat without modelel intracation', () => {
             expect(r.name).toBeDefined()
             expect(r.pid).toBeDefined()
             expect(r.pid).toBe("leifprofile2")
-            console.log(doc.data())
         })
 
     },1000*200);

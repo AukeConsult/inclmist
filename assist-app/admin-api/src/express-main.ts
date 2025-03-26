@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-//import crudRoute from "./controllers/generic.controller"
 
 const expressMain = express();
 

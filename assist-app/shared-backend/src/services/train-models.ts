@@ -7,17 +7,16 @@ import {
     ModelAccount
 } from "shared-library/src";
 import OpenAI from "openai";
-import {app} from "firebase-admin";
-import App = app.App;
+import {firestore} from "firebase-admin";
 
 export class TrainModels {
 
     public storeage: ChatTrainStorage
 
-    constructor(private fireBaseAdmin: App,
+    constructor(private db: firestore.Firestore,
                 public modelAccount: ModelAccount,
                 public skipModel: boolean) {
-        this.storeage = new ChatTrainStorage(this.fireBaseAdmin)
+        this.storeage = new ChatTrainStorage(this.db)
     }
     public async sendEntry(message: ChatEntry)  {
         try {
@@ -88,7 +87,7 @@ export class TrainModels {
                 content: parameters.instructions
             }
         ]
-        if(chatDialog) {
+        if(chatDialog && chatDialog.history) {
 
             var x = chatDialog.history.filter((f) =>
                 f.modelId===parameters.modelId
@@ -133,10 +132,13 @@ export class TrainModels {
                 }
                 // set history based on parameter
                 // used for next call
+                if(!chatDialog.history) {
+                    chatDialog.history = []
+                }
                 chatDialog.history.push(...results)
 
             } catch(error) {
-                console.error(error)
+                console.log(error)
                 throw error
             }
 

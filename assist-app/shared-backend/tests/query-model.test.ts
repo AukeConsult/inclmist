@@ -1,28 +1,30 @@
-import backendApp from "../src";
+import {appConfig} from "../src/config";
 import {ChatEntry} from "shared-library"
+import {QueryModels} from "../src/models/query-models"
+import * as firebase from "firebase-admin"
+firebase.initializeApp({credential: firebase.credential.cert(appConfig.fireBaseServiceAccountKey)});
+
+const model = new QueryModels(firebase.firestore())
 
 describe('Query model', () => {
 
     it('Simple one message', async () => {
-        const model = backendApp.queryModels
         const ret = await model.simpleMessage("what is firebase")
-        console.log(ret)
     })
 
     it('chatenty one message', async () => {
-        const model = backendApp.queryModels
         const chatEntry: ChatEntry = {
+            uid: "leif",
             entry: [
                 {role: "user", content: "hello chatgpt"}
             ]
         }
         const ret = await model.chatMessage(chatEntry)
-        console.log(ret)
     })
 
     it('chatenty 2 messages with history', async () => {
-        const model = backendApp.queryModels
         const chatEntry: ChatEntry = {
+            uid: "leif",
             entry: [
                 {role: "user", content: "what is firebase"}
             ]
@@ -32,8 +34,6 @@ describe('Query model', () => {
         expect(ret.history).toBeDefined()
         expect(ret.replies).toBeDefined()
         expect(ret.history?.length).toBe(1)
-
-        console.log(ret)
 
         chatEntry.replies = undefined
         chatEntry.entry = [
@@ -45,13 +45,6 @@ describe('Query model', () => {
         expect(ret2.replies).toBeDefined()
         expect(ret2.history?.length).toBe(2)
 
-        console.log(ret2)
-
-
     },1000*300)
 
-
 });
-
-
-
