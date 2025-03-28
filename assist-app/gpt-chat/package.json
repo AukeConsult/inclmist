@@ -32,8 +32,6 @@
     "firebase": "^11.4.0",
     "openai": "^4.87.3",
     "rxjs": "^7.8.0",
-    "shared-frontend": "file:../shared-frontend",
-    "shared-library": "file:../shared-library",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

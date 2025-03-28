@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ChatEntry} from 'shared-library';
+import {ChatEntry} from '../shared-library';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from './auth.service';
 

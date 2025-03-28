@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {Observable, Subscription} from 'rxjs';
-import { AppUser } from 'shared-library';
+import { AppUser } from '../../shared-library';
 
 
 @Component({

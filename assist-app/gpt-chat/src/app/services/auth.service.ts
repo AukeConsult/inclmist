@@ -12,7 +12,7 @@ import {
   GoogleAuthProvider,
   sendEmailVerification, updateProfile, updatePassword, updateEmail
 } from '@angular/fire/auth';
-import { AppUser } from 'shared-library';
+import { AppUser } from '../shared-library';
 
 import { Router } from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';

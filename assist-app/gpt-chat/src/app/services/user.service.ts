@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Auth, updateEmail, updatePassword, updateProfile, User} from '@angular/fire/auth';
+import {Auth, updateEmail, updatePassword, updateProfile} from '@angular/fire/auth';
 import {Firestore, setDoc, doc, getDoc} from '@angular/fire/firestore';
-import { AppUser } from 'shared-library';
+import { AppUser } from '../shared-library';
 
 @Injectable({
   providedIn: 'root'

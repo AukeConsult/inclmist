@@ -4,10 +4,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "shared-frontend": ["node_modules/shared-frontend"],
-      "shared-library": ["node_modules/shared-library"],
-    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
