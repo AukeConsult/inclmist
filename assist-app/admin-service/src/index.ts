@@ -1,9 +1,17 @@
 import { deleteUserOnRemove } from "./triggers/authSync";
-import {onCall} from "firebase-functions/v2/https";
+import {onCall, onRequest} from "firebase-functions/v2/https";
 import {getUserByEmail, getUserByUID, listUsers} from "./services/auth.service";
 import {createUser, fetchUsers, updateUser} from "./services/users.service";
 import * as admin from "firebase-admin";
-admin.initializeApp()
+import {Server} from "./shared-backend";
+
+import express from "express";
+const firebaseLocal = admin.initializeApp();
+
+const expressMain = express()
+new Server(expressMain,firebaseLocal)
+
+exports.backend = onRequest(expressMain)
 
 exports.deleteUserOnRemove = deleteUserOnRemove;
 exports.createUser = onCall(async (request) => {

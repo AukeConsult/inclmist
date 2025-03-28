@@ -4,9 +4,7 @@
       "source": ".",
       "codebase": "default",
       "ignore": [
-        "./lib",
         "./node_modules",
-        "**/src/**",
         "**/node_modules/**",
         ".git",
         "firebase-debug.log",

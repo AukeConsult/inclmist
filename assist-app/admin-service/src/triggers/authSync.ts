@@ -1,8 +1,8 @@
-import * as functions from "firebase-functions/v1";
+import { auth } from "firebase-functions/v1";
 import {firestore} from "firebase-admin";
 
 // ✅ Sync Firebase Auth User to Firestore on Create
-exports.syncUserOnCreate = functions.auth.user().onCreate(async (user) => {
+exports.syncUserOnCreate = auth.user().onCreate(async (user) => {
     // Set up default values for extended attributes
     const additionalUserData = {
         address: '',
@@ -29,7 +29,7 @@ exports.syncUserOnCreate = functions.auth.user().onCreate(async (user) => {
 });
 
 // ✅ Delete User from Firestore on Auth Deletion
-export const deleteUserOnRemove = functions.auth.user().onDelete(async (user) => {
+export const deleteUserOnRemove = auth.user().onDelete(async (user) => {
     if (!user) return;
 
     const db = firestore();

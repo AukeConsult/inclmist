@@ -1,7 +1,7 @@
-import {appConfig} from "./config";
+import {appConfig} from ".";
 import * as admin from "firebase-admin";
 import express from "express";
-import Server from "./server";
+import {Server} from ".";
 const firebaseLocal = admin.initializeApp({credential: admin.credential.cert(appConfig.fireBaseServiceAccountKey)});
 
 const expressMain = express()

@@ -1,10 +1,9 @@
-import {ChatMessage} from "shared-library";
+import {ChatMessage,ChatEntry} from "../shared-library";
 import OpenAI from "openai";
-import {ChatEntry} from "shared-library"
 import {firestore} from "firebase-admin";
 import {appConfig} from "../config";
 import Firestore = firestore.Firestore;
-import {ChatStorage} from "../services/chat-storage";
+import {ChatStorage} from "../";
 
 export class QueryModels {
 

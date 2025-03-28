@@ -1,8 +1,9 @@
-import {ChatDialog, ChatEntry} from "shared-library/src/models/chat-dialog";
 import {
     QueryDescriptor,
-    AppUserWork
-} from "shared-library";
+    AppUserWork,
+    ChatDialog,
+    ChatEntry
+} from "../";
 import {firestore} from "firebase-admin";
 
 export class ChatStorage {

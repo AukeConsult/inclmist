@@ -9,3 +9,5 @@ node_modules/
 **/.firebase/*.cache
 **/firebase-debug.log
 **/package-lock.json
+/admin-service/src/shared-backend/
+/shared-backend/src/shared-library/

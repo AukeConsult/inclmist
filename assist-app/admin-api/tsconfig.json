@@ -3,7 +3,7 @@
     "module": "NodeNext",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,

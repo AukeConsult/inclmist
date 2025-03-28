@@ -1,11 +1,12 @@
-import {ChatTrainStorage} from "./chat-train-storage";
 import {
     ChatDialog,
     ChatEntry,
     ChatMessage,
     QueryParameters,
-    ModelAccount
-} from "shared-library/src";
+    ModelAccount,
+    ChatTrainStorage
+} from "../";
+
 import OpenAI from "openai";
 import {firestore} from "firebase-admin";
 

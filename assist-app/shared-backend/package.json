@@ -8,13 +8,7 @@
     "test": "jest",
     "build:watch": "tsc --watch",
     "run-local": "npm run build && node -r ts-node/register src/local.ts",
-    "debug-local": "npm run build && node --inspect-brk -r ts-node/register src/local.ts",
-    "serve-emulate": "firebase emulators:start --only functions",
-    "serve-emulate-all": "firebase emulators:start --inspect-functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "debug-local": "npm run build && node --inspect-brk -r ts-node/register src/local.ts"
   },
   "dependencies": {
     "firebase": "^11.4.0",
@@ -23,13 +17,12 @@
     "firebase-functions": "^5.1.1",
     "guid-typescript": "^1.0.9",
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
     "cors": "^2.8.5",
+    "@types/express": "^5.0.0",
     "express": "^4.21.2",
     "express-async-handler": "^1.2.0",
     "rxjs": "^7.8.0",
-    "openai": "^4.87.3",
-    "shared-library": "file:../shared-library"
+    "openai": "^4.87.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

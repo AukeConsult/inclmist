@@ -1,21 +1,26 @@
 {
   "compilerOptions": {
+    "target": "ES6",
     "module": "CommonJS",
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "declaration": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES6",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["jest"],
     "paths": {
       "shared-library": ["./node_modules/shared-library"],
     }
   },
   "include": [
-    "src/**/*.ts",
-    "tests/**/*.test.ts"
+    "src"
+  ],
+  "exclude": [
+    "node_modules","lib"
   ]
 }

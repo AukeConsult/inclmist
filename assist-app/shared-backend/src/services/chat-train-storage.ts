@@ -1,8 +1,9 @@
-import {ChatDialog, ChatEntry, ChatMessage} from "shared-library/src/models/chat-dialog";
 import {
     QueryDescriptor,
-    ProfileWork
-} from "shared-library";
+    ProfileWork,
+    ChatDialog, ChatEntry, ChatMessage
+} from "../";
+
 import {firestore} from "firebase-admin";
 
 const collnames = {

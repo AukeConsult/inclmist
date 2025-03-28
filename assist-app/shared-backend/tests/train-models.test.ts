@@ -1,11 +1,11 @@
-import {appConfig} from "../src/config";
 import {
     ChatEntry,
     ChatMessage, ModelAccount,
     ModelEnum,
-    VendorEnum
-} from "shared-library";
-import {TrainModels} from "../src/services/train-models";
+    VendorEnum,
+    appConfig,
+    TrainModels
+} from "../src";
 import * as firebase from "firebase-admin"
 firebase.initializeApp({credential: firebase.credential.cert(appConfig.fireBaseServiceAccountKey)});
 

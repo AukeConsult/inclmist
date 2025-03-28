@@ -1,6 +1,4 @@
-import {appConfig} from "../src/config";
-import {ChatEntry} from "shared-library"
-import {QueryModels} from "../src/models/query-models"
+import {appConfig, QueryModels, ChatEntry} from "../src";
 import * as firebase from "firebase-admin"
 firebase.initializeApp({credential: firebase.credential.cert(appConfig.fireBaseServiceAccountKey)});
 
@@ -10,6 +8,7 @@ describe('Query model', () => {
 
     it('Simple one message', async () => {
         const ret = await model.simpleMessage("what is firebase")
+        expect(ret).toBeDefined()
     })
 
     it('chatenty one message', async () => {
@@ -20,6 +19,7 @@ describe('Query model', () => {
             ]
         }
         const ret = await model.chatMessage(chatEntry)
+        expect(ret).toBeDefined()
     })
 
     it('chatenty 2 messages with history', async () => {

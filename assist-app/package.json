@@ -2,7 +2,11 @@
   "name": "main",
   "version": "1.0.0",
   "scripts": {
-    "build-all": "cd shared-library & npm run build & cd ../shared-backend & npm install & npm run build & cd ../gpt-chat & npm install & cd ..",
+    "build-lib": "cd shared-library & npm run build & cd ..",
+    "build-backend": "cd shared-backend & npm install & npm run build & cd ..",
+    "build-service": "cd admin-service & npm install & npm run build & cd ..",
+    "build-ui": "cd gpt-chat & npm install & cd ..",
+    "build-all": "npm run build-lib & npm run build-backend & npm run build-service & cd ..",
     "test-all": "npm run build-all & cd shared-backend & npm run test"
   }
 }

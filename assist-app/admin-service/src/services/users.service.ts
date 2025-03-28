@@ -1,4 +1,4 @@
-import { AppUser } from "shared-library";
+import { AppUser } from "../shared-backend";
 import { firestore } from "firebase-admin";
 
 export const createUser = async (name: string, email: string) => {

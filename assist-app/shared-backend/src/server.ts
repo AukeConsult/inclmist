@@ -1,10 +1,10 @@
 import cors, {CorsOptions} from "cors";
-import {QueryModels} from "./models/query-models";
+import {QueryModels} from ".";
 import {app} from "firebase-admin";
 import App = app.App;
 import express, {Application} from "express";
 
-export default class Server {
+export class Server  {
 
     constructor(app: Application, firebase: App) {
 
