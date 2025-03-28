@@ -12,7 +12,7 @@ describe('logon firebase', () => {
         await docRef.set({})
         console.log(docRef.id)
         docRef.delete()
-    })
+    },1000*300)
 
     it('partial update firebase', async () => {
         const db = firestore()
@@ -33,7 +33,7 @@ describe('logon firebase', () => {
             postaddress: 3034
         })
 
-    })
+    },1000*300)
 
     it('update sub collections', async () => {
 
@@ -61,7 +61,7 @@ describe('logon firebase', () => {
         await docRef.update({
             postaddress: 4000
         })
-    })
+    },1000*300)
 
 });
 
